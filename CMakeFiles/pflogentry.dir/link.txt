@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -shared -Wl,-soname,libpflogentry.so.1 -o libpflogentry.so.1.0 CMakeFiles/pflogentry.dir/pflogentry.cc.o  -ltinyxml2 -lpthread 

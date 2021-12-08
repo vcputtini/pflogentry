@@ -1,0 +1,7 @@
+/dados/desenvolvimento/cplusplus/pflogentry/CMakeFiles/install/strip.dir
+/dados/desenvolvimento/cplusplus/pflogentry/CMakeFiles/install.dir
+/dados/desenvolvimento/cplusplus/pflogentry/CMakeFiles/list_install_components.dir
+/dados/desenvolvimento/cplusplus/pflogentry/CMakeFiles/rebuild_cache.dir
+/dados/desenvolvimento/cplusplus/pflogentry/CMakeFiles/edit_cache.dir
+/dados/desenvolvimento/cplusplus/pflogentry/CMakeFiles/install/local.dir
+/dados/desenvolvimento/cplusplus/pflogentry/CMakeFiles/pflogentry.dir
