@@ -1,0 +1,57 @@
+Summary: Range from: 2021-07-08 10:00:00 to: 2021-07-08 11:00:00
+
+GRAND TOTALS
+Total log entries processed: 2542
+Total TCPv4:            1361
+Total TCPv6:            0
+Total UDPv4:            1141
+Total ICMPv4:           40
+Total ICMPv6:           0
+Total IGMP:             0
+Total CARP:             0
+Total IPv6 HopOpt:      0
+--------------------------------------------------------------------------------
+Hostname: [All]
+IP Version: [4] Protocol: [TCP]
+Total Unique Ip Addresses - Source: 25 Destination: 418
+Total in Range: 0
+
+Real Interface: [All] Direction: [in]
+Reason____ Total____ Pass_____ Block____ Unkn(%u)_
+Match_____      1354      1340         8         6
+Other_____         0         0         0         0
+
+Real Interface: [All] Direction: [out]
+Reason____ Total____ Pass_____ Block____ Unkn(%u)_
+Match_____         6         0         0         6
+Other_____         0         0         0         0
+================================================================================
+Summary: Range from: 2021-07-08 10:00:00 to: 2021-07-08 11:00:00
+
+GRAND TOTALS
+Total log entries processed: 2542
+Total TCPv4:            1361
+Total TCPv6:            0
+Total UDPv4:            1141
+Total ICMPv4:           40
+Total ICMPv6:           0
+Total IGMP:             0
+Total CARP:             0
+Total IPv6 HopOpt:      0
+--------------------------------------------------------------------------------
+Hostname: [All]
+IP Version: [4] Protocol: [UDP]
+Total Unique Ip Addresses - Source: 1 Destination: 101
+Total in Range: 2501
+Acc. Data Length: 509428
+
+Real Interface: [All] Direction: [in]
+Reason____ Total____ Pass_____ Block____ Unkn(%u)_
+Match_____      1141      1141         0         0
+Other_____         0         0         0         0
+
+Real Interface: [All] Direction: [out]
+Reason____ Total____ Pass_____ Block____ Unkn(%u)_
+Match_____         0         0         0         0
+Other_____         0         0         0         0
+================================================================================

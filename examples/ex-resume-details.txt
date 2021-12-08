@@ -1,0 +1,974 @@
+PFLogentry
+
+Range from: [2021-11-29 00:00:00] To: [2021-11-29 18:00:00]
+Host Name: [All                                                                ]
+Real Ifname: [All       ] Protocol/Version: [TCP    ]/[4]
+================================================================================
+
+Source Address: 1.168.84.91
+Source Address: 1.4.198.137
+	Port: 64022 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 1.52.42.185
+	Port: 56369 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 172.16.100.1
+	Port: 65199 Score: 1
+		Dir: [in] Dest: [13.107.4.52:80]
+	Port: 65200 Score: 1
+		Dir: [in] Dest: [23.37.252.155:443]
+	Port: 65201 Score: 1
+		Dir: [in] Dest: [40.90.136.1:443]
+	Port: 65202 Score: 1
+		Dir: [in] Dest: [23.73.220.84:443]
+	Port: 65203 Score: 1
+		Dir: [in] Dest: [192.168.1.101:445]
+	Port: 65204 Score: 1
+		Dir: [in] Dest: [192.168.1.101:445]
+	Port: 65205 Score: 1
+		Dir: [in] Dest: [192.168.1.101:445]
+	Port: 65206 Score: 1
+		Dir: [in] Dest: [192.168.1.101:445]
+	Port: 65207 Score: 1
+		Dir: [in] Dest: [192.168.1.101:445]
+	Port: 65208 Score: 1
+		Dir: [in] Dest: [192.168.1.101:445]
+	Port: 65209 Score: 1
+		Dir: [in] Dest: [192.168.1.101:445]
+	Port: 65210 Score: 1
+		Dir: [in] Dest: [192.168.1.101:445]
+	Port: 65211 Score: 1
+		Dir: [in] Dest: [192.168.1.101:445]
+	Port: 65212 Score: 1
+		Dir: [in] Dest: [192.168.1.101:445]
+	Port: 65213 Score: 1
+		Dir: [in] Dest: [192.168.1.101:445]
+	Port: 65214 Score: 1
+		Dir: [in] Dest: [192.168.1.101:445]
+	Port: 65215 Score: 1
+		Dir: [in] Dest: [192.168.1.101:445]
+	Port: 65216 Score: 1
+		Dir: [in] Dest: [192.168.1.101:445]
+Source Address: 102.130.49.150
+Source Address: 103.105.28.178
+	Port: 41113 Score: 2
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+	Port: 41114 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 103.11.107.254
+	Port: 62459 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 103.114.244.67
+Source Address: 103.203.57.21
+	Port: 54919 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 103.228.245.138
+Source Address: 103.41.99.11
+	Port: 58436 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 103.57.150.23
+	Port: 58853 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 103.80.210.116
+	Port: 53253 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 104.131.176.211
+Source Address: 104.248.168.195
+Source Address: 106.75.211.240
+	Port: 35812 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 54322 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 107.173.181.13
+Source Address: 109.237.103.38
+	Port: 46678 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 46858 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 109.49.154.110
+Source Address: 110.50.86.73
+Source Address: 112.133.246.159
+	Port: 11609 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+	Port: 34785 Score: 2
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 113.128.97.177
+	Port: 15936 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 113.141.70.131
+Source Address: 113.161.185.209
+	Port: 37627 Score: 2
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+	Port: 63490 Score: 1
+		Dir: [in] Dest: [166.179.198.1:139]
+Source Address: 114.255.88.84
+	Port: 49692 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 115.79.200.206
+	Port: 39736 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 116.110.183.173
+Source Address: 116.206.13.83
+	Port: 24534 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 116.206.9.5
+Source Address: 117.0.33.154
+	Port: 56394 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 117.158.62.74
+	Port: 43619 Score: 1
+		Dir: [in] Dest: [166.179.198.1:12345]
+Source Address: 117.68.2.55
+Source Address: 117.97.190.7
+Source Address: 120.29.226.5
+Source Address: 121.136.234.139
+Source Address: 121.5.226.36
+	Port: 58386 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 122.116.128.166
+Source Address: 122.227.54.178
+	Port: 60654 Score: 2
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 122.252.254.49
+	Port: 52835 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 123.194.20.197
+	Port: 57833 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 123.22.164.20
+	Port: 53385 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 128.9.29.131
+Source Address: 128.9.63.139
+Source Address: 129.203.107.1
+Source Address: 129.203.116.1
+Source Address: 129.203.121.1
+Source Address: 129.203.125.1
+Source Address: 129.203.166.1
+Source Address: 129.203.179.1
+Source Address: 129.203.252.1
+Source Address: 129.203.96.1
+Source Address: 129.82.138.44
+Source Address: 130.105.219.179
+	Port: 64895 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 137.184.51.62
+Source Address: 137.220.131.98
+Source Address: 139.162.215.70
+	Port: 36632 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 139.162.247.102
+Source Address: 139.194.63.60
+	Port: 59400 Score: 1
+		Dir: [in] Dest: [166.179.198.1:139]
+Source Address: 14.235.57.149
+	Port: 56739 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 14.237.137.179
+Source Address: 141.98.10.121
+	Port: 47537 Score: 2
+		Dir: [in] Dest: [166.179.198.1:111]
+		Dir: [in] Dest: [166.179.198.1:111]
+Source Address: 141.98.10.246
+Source Address: 141.98.10.60
+	Port: 46874 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 60343 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 141.98.10.63
+	Port: 37175 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 46303 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 48520 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 53314 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 141.98.10.81
+	Port: 37122 Score: 2
+		Dir: [in] Dest: [166.179.198.1:111]
+		Dir: [in] Dest: [166.179.198.1:111]
+	Port: 49236 Score: 2
+		Dir: [in] Dest: [166.179.198.1:111]
+		Dir: [in] Dest: [166.179.198.1:111]
+	Port: 56739 Score: 2
+		Dir: [in] Dest: [166.179.198.1:111]
+		Dir: [in] Dest: [166.179.198.1:111]
+Source Address: 141.98.10.82
+	Port: 34332 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 37460 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 47683 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 51860 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 53214 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 59938 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 142.150.52.16
+	Port: 40963 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 143.0.0.116
+	Port: 60401 Score: 2
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 143.131.174.1
+Source Address: 143.198.175.192
+Source Address: 143.244.58.247
+Source Address: 146.88.240.4
+Source Address: 147.203.255.20
+Source Address: 147.78.1.202
+Source Address: 148.102.115.5
+Source Address: 151.106.164.1
+Source Address: 151.106.175.1
+Source Address: 151.236.102.253
+Source Address: 152.32.156.245
+Source Address: 154.239.159.208
+Source Address: 155.146.96.69
+Source Address: 155.94.254.7
+Source Address: 158.255.7.133
+	Port: 51125 Score: 5
+		Dir: [in] Dest: [166.179.198.1:995]
+		Dir: [in] Dest: [166.179.198.1:465]
+		Dir: [in] Dest: [10.100.15.153:443]
+		Dir: [in] Dest: [166.179.198.1:143]
+		Dir: [in] Dest: [166.179.198.1:110]
+Source Address: 159.203.62.220
+	Port: 48658 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 159.223.2.20
+Source Address: 159.223.74.158
+	Port: 56020 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 159.65.129.13
+	Port: 17868 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 51598 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 160.154.43.146
+	Port: 49648 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 160.238.136.117
+	Port: 22081 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 162.142.125.176
+	Port: 5189 Score: 2
+		Dir: [in] Dest: [10.100.15.153:443]
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 162.142.125.18
+Source Address: 162.142.125.23
+Source Address: 162.247.74.216
+Source Address: 162.62.61.98
+	Port: 46276 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 164.90.187.168
+	Port: 38931 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 164.90.198.177
+	Port: 15039 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 164.90.206.120
+	Port: 5763 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 14822 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 164.92.242.27
+Source Address: 165.16.42.201
+Source Address: 165.22.195.82
+Source Address: 167.248.133.23
+	Port: 57057 Score: 1
+		Dir: [in] Dest: [166.179.198.1:995]
+Source Address: 167.248.133.43
+	Port: 35226 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 36110 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 41234 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 41702 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 46310 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 46968 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 52526 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 52704 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 58322 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 58930 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 167.71.11.216
+	Port: 34447 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 52318 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 167.71.12.34
+	Port: 53892 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 167.71.77.225
+Source Address: 167.94.138.28
+Source Address: 167.94.138.41
+	Port: 58206 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 167.94.145.23
+	Port: 34902 Score: 2
+		Dir: [in] Dest: [166.179.198.1:111]
+		Dir: [in] Dest: [166.179.198.1:111]
+Source Address: 170.106.115.39
+Source Address: 170.178.214.42
+Source Address: 171.225.250.79
+Source Address: 171.7.238.239
+Source Address: 176.214.28.92
+	Port: 59499 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 176.45.39.106
+	Port: 50003 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 176.57.189.124
+Source Address: 176.99.134.237
+Source Address: 177.184.74.209
+	Port: 25727 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 177.189.122.61
+	Port: 6093 Score: 2
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+	Port: 48112 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+	Port: 50179 Score: 2
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 177.189.167.193
+Source Address: 177.189.206.128
+	Port: 3061 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+	Port: 33047 Score: 2
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+	Port: 64021 Score: 2
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 166.179.198.1
+	Port: 49741 Score: 1
+		Dir: [out] Dest: [138.199.4.69:6568]
+	Port: 52513 Score: 1
+		Dir: [out] Dest: [92.38.150.23:6568]
+	Port: 55943 Score: 1
+		Dir: [out] Dest: [92.38.150.22:6568]
+	Port: 55951 Score: 1
+		Dir: [out] Dest: [138.199.4.71:6568]
+	Port: 59702 Score: 1
+		Dir: [out] Dest: [92.38.150.22:6568]
+	Port: 63044 Score: 1
+		Dir: [out] Dest: [189.1.174.48:6568]
+	Port: 63497 Score: 1
+		Dir: [out] Dest: [177.54.145.81:6568]
+	Port: 63502 Score: 1
+		Dir: [out] Dest: [138.199.4.74:6568]
+	Port: 64080 Score: 1
+		Dir: [out] Dest: [138.199.4.77:6568]
+Source Address: 177.189.63.241
+	Port: 35613 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 177.189.65.59
+Source Address: 177.223.78.2
+	Port: 55470 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 177.36.196.48
+	Port: 58851 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 177.47.193.126
+	Port: 58878 Score: 2
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 177.67.4.131
+	Port: 59099 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 177.70.163.94
+	Port: 51928 Score: 3
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 179.246.217.189
+Source Address: 179.43.187.37
+	Port: 34226 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 180.242.230.10
+	Port: 53348 Score: 2
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 180.245.174.172
+Source Address: 180.245.187.183
+Source Address: 180.250.196.138
+	Port: 1333 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 180.253.137.49
+	Port: 64357 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 181.36.42.18
+Source Address: 183.83.190.186
+	Port: 59492 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 184.105.139.76
+Source Address: 185.100.87.54
+Source Address: 185.142.236.34
+Source Address: 185.165.190.17
+Source Address: 185.167.96.138
+	Port: 32996 Score: 1
+		Dir: [in] Dest: [166.179.198.1:995]
+	Port: 55945 Score: 1
+		Dir: [in] Dest: [166.179.198.1:465]
+Source Address: 185.167.97.191
+Source Address: 185.189.72.135
+Source Address: 185.220.100.251
+Source Address: 185.220.101.160
+Source Address: 185.220.205.196
+	Port: 59719 Score: 1
+		Dir: [in] Dest: [166.179.198.1:1025]
+Source Address: 185.31.159.65
+Source Address: 185.85.219.140
+	Port: 54330 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 185.94.111.1
+Source Address: 186.91.53.122
+Source Address: 188.162.229.162
+	Port: 8064 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 188.241.178.107
+Source Address: 190.204.104.3
+	Port: 65206 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 190.242.104.218
+	Port: 4268 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 191.193.99.147
+Source Address: 192.172.226.11
+Source Address: 192.210.243.232
+	Port: 44394 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 192.241.194.47
+Source Address: 192.241.195.123
+Source Address: 192.241.200.185
+Source Address: 192.241.200.235
+	Port: 43037 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 55126 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 192.241.201.42
+	Port: 33748 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 60385 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 192.241.207.214
+Source Address: 192.241.209.62
+	Port: 34094 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 46026 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 192.241.209.88
+	Port: 50988 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 192.241.210.106
+	Port: 35816 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 37270 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 192.241.210.108
+Source Address: 192.241.210.24
+	Port: 54076 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 192.241.210.245
+	Port: 52961 Score: 1
+		Dir: [in] Dest: [166.179.198.1:139]
+Source Address: 192.241.210.65
+Source Address: 192.241.211.139
+Source Address: 192.241.211.143
+	Port: 51208 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 192.241.211.144
+	Port: 45778 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 49340 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 192.241.211.166
+	Port: 37726 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 42122 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 192.241.211.84
+	Port: 49456 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 52944 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 192.241.212.101
+	Port: 45992 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 50263 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 192.241.212.103
+Source Address: 192.241.212.115
+Source Address: 192.241.212.165
+Source Address: 192.241.212.213
+	Port: 44358 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 192.241.212.251
+Source Address: 192.241.212.44
+	Port: 36270 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 41014 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 192.241.213.122
+Source Address: 192.241.213.243
+Source Address: 192.241.213.5
+	Port: 48868 Score: 1
+		Dir: [in] Dest: [166.179.198.1:139]
+Source Address: 192.241.214.10
+Source Address: 192.241.214.143
+	Port: 38704 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 39676 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 40656 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 41532 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 42400 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 43268 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 44166 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 45082 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 45106 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 45952 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 46854 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 192.241.214.146
+Source Address: 192.241.215.54
+Source Address: 192.241.215.83
+Source Address: 192.241.215.84
+Source Address: 193.163.125.55
+	Port: 40222 Score: 1
+		Dir: [in] Dest: [166.179.198.1:1025]
+Source Address: 193.163.125.58
+	Port: 43496 Score: 1
+		Dir: [in] Dest: [166.179.198.1:1027]
+Source Address: 193.193.232.56
+	Port: 57559 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 195.133.18.210
+	Port: 36001 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 46120 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 195.169.125.251
+Source Address: 195.230.103.249
+Source Address: 195.230.103.250
+	Port: 37995 Score: 1
+		Dir: [in] Dest: [166.179.198.1:465]
+Source Address: 195.251.255.69
+Source Address: 196.218.89.46
+	Port: 54672 Score: 1
+		Dir: [in] Dest: [166.179.198.1:139]
+Source Address: 197.219.232.14
+	Port: 50798 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 198.199.92.190
+Source Address: 198.98.59.224
+	Port: 60467 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 199.195.249.152
+	Port: 41178 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 2.179.64.63
+	Port: 46221 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 2.56.59.114
+	Port: 41877 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 49159 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 20.124.80.141
+	Port: 59628 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 20.195.190.118
+Source Address: 200.146.104.244
+	Port: 50111 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 202.142.81.213
+	Port: 24549 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 202.53.95.14
+	Port: 54839 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 203.121.145.111
+Source Address: 203.192.211.123
+	Port: 62059 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 204.9.247.163
+	Port: 49910 Score: 3
+		Dir: [in] Dest: [166.179.198.1:22]
+		Dir: [in] Dest: [166.179.198.1:22]
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 205.185.114.87
+	Port: 56313 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 58316 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 59814 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 60986 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 205.185.115.39
+	Port: 39378 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 46858 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 54631 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 55569 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 205.185.120.71
+	Port: 47845 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 205.185.126.99
+	Port: 51209 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 209.14.131.233
+	Port: 40520 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 43851 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 209.141.32.141
+	Port: 37483 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 209.141.32.206
+	Port: 52324 Score: 1
+		Dir: [in] Dest: [166.179.198.1:6000]
+Source Address: 209.141.33.121
+	Port: 41663 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 48174 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 59250 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 209.141.34.220
+	Port: 37676 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 209.141.36.251
+	Port: 50306 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 209.141.48.248
+	Port: 54333 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 209.141.49.233
+Source Address: 209.141.53.74
+Source Address: 209.141.62.233
+	Port: 39060 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 210.4.114.170
+	Port: 63412 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 210.5.122.11
+	Port: 61722 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 211.36.204.140
+	Port: 62143 Score: 2
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 212.192.241.37
+	Port: 57559 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 59088 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 216.143.135.92
+	Port: 44295 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 217.138.209.220
+Source Address: 217.21.193.74
+Source Address: 217.219.67.90
+	Port: 55679 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 218.93.208.150
+	Port: 9090 Score: 2
+		Dir: [in] Dest: [166.179.198.1:22]
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 219.142.106.139
+Source Address: 219.146.152.154
+	Port: 27771 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 219.147.27.218
+	Port: 21510 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 221.181.185.143
+	Port: 9090 Score: 2
+		Dir: [in] Dest: [166.179.198.1:22]
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 222.186.31.166
+	Port: 9090 Score: 2
+		Dir: [in] Dest: [166.179.198.1:22]
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 222.187.232.10
+	Port: 9090 Score: 2
+		Dir: [in] Dest: [166.179.198.1:22]
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 223.71.167.164
+	Port: 49034 Score: 2
+		Dir: [in] Dest: [166.179.198.1:111]
+		Dir: [in] Dest: [166.179.198.1:111]
+	Port: 56400 Score: 2
+		Dir: [in] Dest: [166.179.198.1:111]
+		Dir: [in] Dest: [166.179.198.1:111]
+Source Address: 23.105.70.70
+Source Address: 23.108.65.85
+Source Address: 23.129.64.141
+Source Address: 23.129.64.143
+Source Address: 23.129.64.210
+Source Address: 23.129.64.217
+Source Address: 23.129.64.219
+Source Address: 23.148.144.249
+	Port: 48710 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 51594 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 23.183.81.227
+	Port: 50899 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 23.183.81.249
+Source Address: 23.183.81.54
+	Port: 48431 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 23.183.82.135
+	Port: 42391 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 49706 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 23.183.82.180
+	Port: 47741 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 23.95.18.5
+	Port: 40150 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 24.176.234.209
+Source Address: 24.220.156.37
+	Port: 49939 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 27.3.73.104
+Source Address: 27.71.80.186
+	Port: 40035 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 34.140.248.32
+	Port: 34032 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 34.152.17.69
+	Port: 54847 Score: 1
+		Dir: [in] Dest: [166.179.198.1:139]
+Source Address: 35.247.250.167
+	Port: 59416 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 36.46.67.225
+Source Address: 36.90.118.168
+Source Address: 36.94.226.131
+	Port: 59913 Score: 3
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 37.120.149.150
+Source Address: 37.143.130.124
+Source Address: 41.33.146.1
+	Port: 40792 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 41.33.238.98
+	Port: 54396 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 43.129.33.99
+	Port: 45552 Score: 1
+		Dir: [in] Dest: [166.179.198.1:143]
+	Port: 58752 Score: 1
+		Dir: [in] Dest: [166.179.198.1:139]
+Source Address: 43.131.94.145
+Source Address: 43.135.195.207
+Source Address: 44.235.91.72
+	Port: 50612 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 45.131.68.37
+Source Address: 45.146.164.110
+	Port: 49628 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 52304 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 55744 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 45.146.164.128
+Source Address: 45.146.164.160
+	Port: 65030 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 45.227.253.62
+	Port: 40950 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 45.249.78.91
+	Port: 51757 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 45.61.184.103
+	Port: 32916 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 45.83.66.68
+Source Address: 45.88.137.100
+	Port: 16762 Score: 3
+		Dir: [in] Dest: [166.179.198.1:22]
+		Dir: [in] Dest: [166.179.198.1:22]
+		Dir: [in] Dest: [166.179.198.1:22]
+	Port: 64006 Score: 2
+		Dir: [in] Dest: [166.179.198.1:22]
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 45.88.137.253
+	Port: 22122 Score: 3
+		Dir: [in] Dest: [166.179.198.1:22]
+		Dir: [in] Dest: [166.179.198.1:22]
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 46.253.8.38
+	Port: 33570 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+	Port: 33572 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 49.51.81.230
+Source Address: 49.88.112.109
+Source Address: 5.172.177.23
+	Port: 48238 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 5.183.182.167
+	Port: 60861 Score: 2
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 5.218.98.214
+	Port: 53347 Score: 2
+		Dir: [in] Dest: [166.179.198.1:445]
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 5.44.169.151
+	Port: 51611 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 5.44.41.15
+Source Address: 50.206.63.8
+Source Address: 51.158.100.61
+Source Address: 54.161.4.253
+Source Address: 61.227.58.6
+Source Address: 62.23.142.219
+	Port: 62971 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 63.143.41.178
+Source Address: 64.246.161.26
+	Port: 57078 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 64.62.197.188
+Source Address: 65.49.20.100
+	Port: 35016 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 65.49.20.103
+Source Address: 65.49.20.121
+	Port: 36117 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 65.49.20.68
+	Port: 15834 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 17186 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 21542 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 23256 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 29988 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 32744 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 37382 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 39966 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 44806 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 47242 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 51914 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 53056 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 54606 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+	Port: 59530 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 68.183.84.15
+	Port: 40317 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 71.6.233.225
+Source Address: 72.14.190.21
+Source Address: 74.3.163.37
+Source Address: 76.186.131.156
+	Port: 58000 Score: 3
+		Dir: [in] Dest: [166.179.198.1:22]
+		Dir: [in] Dest: [166.179.198.1:22]
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 77.43.18.74
+	Port: 44804 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 8.142.79.116
+	Port: 34510 Score: 2
+		Dir: [in] Dest: [166.179.198.1:22]
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 80.82.77.144
+	Port: 51093 Score: 1
+		Dir: [in] Dest: [166.179.198.1:5554]
+Source Address: 80.85.86.31
+	Port: 37862 Score: 1
+		Dir: [in] Dest: [10.100.15.153:443]
+Source Address: 81.12.21.155
+	Port: 55870 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 82.202.242.26
+Source Address: 82.202.242.30
+Source Address: 82.81.169.209
+	Port: 65280 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 85.132.3.30
+	Port: 65448 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 85.132.79.100
+Source Address: 85.209.0.186
+	Port: 45700 Score: 4
+		Dir: [in] Dest: [166.179.198.1:22]
+		Dir: [in] Dest: [166.179.198.1:22]
+		Dir: [in] Dest: [166.179.198.1:22]
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 85.239.114.196
+Source Address: 88.14.219.208
+	Port: 50213 Score: 1
+		Dir: [in] Dest: [166.179.198.1:22]
+Source Address: 89.248.165.204
+	Port: 40402 Score: 4
+		Dir: [in] Dest: [166.179.198.1:33487]
+		Dir: [in] Dest: [166.179.198.1:33486]
+		Dir: [in] Dest: [166.179.198.1:138]
+		Dir: [in] Dest: [166.179.198.1:33453]
+Source Address: 89.248.165.59
+	Port: 53653 Score: 3
+		Dir: [in] Dest: [166.179.198.1:6000]
+		Dir: [in] Dest: [166.179.198.1:33489]
+		Dir: [in] Dest: [166.179.198.1:5556]
+Source Address: 92.222.50.21
+Source Address: 94.232.46.20
+Source Address: 95.141.142.46
+	Port: 56062 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
+Source Address: 95.171.21.227
+	Port: 53391 Score: 1
+		Dir: [in] Dest: [166.179.198.1:445]
