@@ -15,14 +15,14 @@ main()
 {
   using PFLError = PFLogentry::PFLError;
   using LogFormat = PFLogentry::LogFormat;
-  
+
   std::string raw_log{};
 
   /* When using the BSD log format (RFC-3164), we must enter the year as this
    * format does not include this information in the log line.
    * For the SysLog format (RFC-5424) this is not necessary. */
 
-  // PFLogentry *pfl = new PFLogentry(PFLogentry::LogSyslog);
+  // PFLogentry *pfl = new PFLogentry(LogFormat::LogSyslog);
   PFLogentry* pfl = new PFLogentry(LogFormat::LogBSD, 2021);
   while (std::getline(std::cin, raw_log)) {
     pfl->append(raw_log);
@@ -103,7 +103,23 @@ main()
   if (str == PFLogentry::invalidText) {
     std::cout << "Index Out of range\n";
   } else {
-    std::cout << ui << "\n";
+    std::cout << str << "\n";
+  }
+
+  std::cout << "Report\n";
+  for(size_t i = 0; i != q->size(); i++) {
+      int ii = q->getInt(i, PFLogentry::SrcPort);
+      if (ii == INT_MAX) { // defined in <climits>
+        std::cout << "Index Out of range\n";
+      } else {
+        std::cout << "Source Port = " << ii; // << "\n";
+      }
+      std::string str = q->getText(i, PFLogentry::RealIFace);
+      if (str == PFLogentry::invalidText) {
+        std::cout << "Index Out of range\n";
+      } else {
+        std::cout << " Real InterFace = " << str << "\n";
+      }
   }
 
   delete q;
