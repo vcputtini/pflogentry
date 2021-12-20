@@ -454,7 +454,7 @@ private:
   std::vector<std::string> split(const std::string&& s_, const char sep_ = ',');
   inline bool isMonth(const std::string&& s_);
   inline int monthToNumber(const std::string&& s_) const;
-  bool isValidEntry(const std::string s_);
+  inline bool isValidEntry(const std::string s_);
 
 protected:
   PFLError pflError = PFLError::PFL_SUCCESS;

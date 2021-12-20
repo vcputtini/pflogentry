@@ -160,7 +160,7 @@ PFLogentry::monthToNumber(const std::string&& s_) const
  * \brief Try to ensure that the input is valid.
  * \param s_ Entry line
  * \return bool
- * \note It doesn't test whether the entire line is empty.
+ * \note It doesn't check whether the entire line is empty.
  * If the first character is blank then it considers the line invalid. But an
  * entirely blank line should just be ignored and not be considered an error.
  */
@@ -170,9 +170,7 @@ PFLogentry::isValidEntry(const std::string s_)
   if (s_.find("filterlog") != std::string::npos) {
     if (s_[0] == '<' && s_[4] == '>' && std::isdigit(s_[5])) { // <nnn>n
       return true;
-    } else if (!std::isalpha(s_[0])) {
-      return false;
-    } else if (std::isblank(s_[0])) {
+    } else if (!std::isalpha(s_[0]) || std::isblank(s_[0])) {
       return false;
     }
     return true;
@@ -234,8 +232,8 @@ PFLogentry::split(const std::string&& s_, const char sep_)
  * \note If the user does not inform the '.xml' extension, the library will
  * provide it. If another extension is informed, it will not be considered valid
  * and the function will return -1.
- * \note Important: The PFRawToXML object will always erase the data read after
- * writing the XML file.
+ * \warning Important: The PFRawToXML object will always erase the data read
+ * after writing the XML file.
  */
 PFLogentry::PFLError
 PFLogentry::toXML(const std::string fn_)
@@ -244,7 +242,6 @@ PFLogentry::toXML(const std::string fn_)
     if (filter_m.size() != 0) {
       PFRawToXML xml(log_fmt_);
       if (xml.save(fn_) != PFLError::PFL_SUCCESS) {
-        std::cout << "AQUI\n";
         setError(PFLError::PFL_ERR_XML_FILE_NAME_INCONSISTENT);
         return PFLError::PFL_ERR_XML_FILE_NAME_INCONSISTENT;
       }
@@ -560,20 +557,21 @@ PFLogentry::parse()
             }
           }
 
-          (log_data.proto_id == ProtoTCP && log_data.ip_version == 4)
+          (log_data.proto_id == ProtoID::ProtoTCP && log_data.ip_version == 4)
             ? acc_t.accTCP4++
             : 0;
-          (log_data.proto_id == ProtoTCP && log_data.ip_version == 6)
+          (log_data.proto_id == ProtoID::ProtoTCP && log_data.ip_version == 6)
             ? acc_t.accTCP6++
             : 0;
-          (log_data.proto_id == ProtoHOPOPT && log_data.ip_version == 6)
+          (log_data.proto_id == ProtoID::ProtoHOPOPT &&
+           log_data.ip_version == 6)
             ? acc_t.accHopOpt++
             : 0;
-          (log_data.proto_id == ProtoUDP) ? acc_t.accUDP++ : 0;
-          (log_data.proto_id == ProtoIGMP) ? acc_t.accIGMP++ : 0;
-          (log_data.proto_id == ProtoCARP) ? acc_t.accCARP++ : 0;
-          (log_data.proto_id == ICMPv4) ? acc_t.accICMP4++ : 0;
-          (log_data.proto_id == ICMPv6) ? acc_t.accICMP6++ : 0;
+          (log_data.proto_id == ProtoID::ProtoUDP) ? acc_t.accUDP++ : 0;
+          (log_data.proto_id == ProtoID::ProtoIGMP) ? acc_t.accIGMP++ : 0;
+          (log_data.proto_id == ProtoID::ProtoCARP) ? acc_t.accCARP++ : 0;
+          (log_data.proto_id == ProtoID::ICMPv4) ? acc_t.accICMP4++ : 0;
+          (log_data.proto_id == ProtoID::ICMPv6) ? acc_t.accICMP6++ : 0;
 
         } else {
           setError(PFLError::PFL_ERR_PARSE_INVALID_PROTOCOL);
@@ -762,9 +760,9 @@ PFLogentry::decision(TVarD&& data_,
                      TMax&& max_,
                      TCompare&& cmp_) const
 {
-  if (cmp_ == BTWAND) {
+  if (cmp_ == Compare::BTWAND) {
     return ((data_ >= min_) && (data_ <= max_));
-  } else if (cmp_ == BTWOR) {
+  } else if (cmp_ == Compare::BTWOR) {
     return ((data_ >= min_) || (data_ <= max_));
   }
   return false;
@@ -783,17 +781,17 @@ template<typename TVarS, typename TVarD, typename TCompare>
 bool
 PFLogentry::decision(TVarS&& lhs_, TVarD&& rhs_, TCompare&& cmp_) const
 {
-  if (cmp_ == EQ) {
+  if (cmp_ == Compare::EQ) {
     return lhs_ == rhs_;
-  } else if (cmp_ == LT) {
+  } else if (cmp_ == Compare::LT) {
     return lhs_ < rhs_;
-  } else if (cmp_ == GT) {
+  } else if (cmp_ == Compare::GT) {
     return lhs_ > rhs_;
-  } else if (cmp_ == LE) {
+  } else if (cmp_ == Compare::LE) {
     return lhs_ <= rhs_;
-  } else if (cmp_ == GE) {
+  } else if (cmp_ == Compare::GE) {
     return lhs_ >= rhs_;
-  } else if (cmp_ == NE) {
+  } else if (cmp_ == Compare::NE) {
     return lhs_ != rhs_;
   }
   return false;
@@ -959,7 +957,7 @@ PFLogentry::uint32Fields(Fields f_, const LogData& d_) const
 std::string
 PFLogentry::strFields(Fields f_, const LogData& d_) const
 {
-  std::string r{};
+  std::string r = {};
   switch (f_) {
     case Fields::HdrTimeStamp:
       r = std::string();
@@ -1085,7 +1083,7 @@ PFCounter::count(Fields fld_)
 size_t
 PFCounter::eq(var_t&& t_) const
 {
-  return compute(t_, EQ);
+  return compute(t_, Compare::EQ);
 }
 
 /*!
@@ -1096,7 +1094,7 @@ PFCounter::eq(var_t&& t_) const
 size_t
 PFCounter::lt(var_t&& t_) const
 {
-  return compute(t_, LT);
+  return compute(t_, Compare::LT);
 }
 
 /*!
@@ -1107,7 +1105,7 @@ PFCounter::lt(var_t&& t_) const
 size_t
 PFCounter::gt(var_t&& t_) const
 {
-  return compute(t_, GT);
+  return compute(t_, Compare::GT);
 }
 
 /*!
@@ -1118,7 +1116,7 @@ PFCounter::gt(var_t&& t_) const
 size_t
 PFCounter::le(var_t&& t_) const
 {
-  return compute(t_, LE);
+  return compute(t_, Compare::LE);
 }
 
 /*!
@@ -1129,7 +1127,7 @@ PFCounter::le(var_t&& t_) const
 size_t
 PFCounter::ge(var_t&& t_) const
 {
-  return compute(t_, GE);
+  return compute(t_, Compare::GE);
 }
 
 /*!
@@ -1140,7 +1138,7 @@ PFCounter::ge(var_t&& t_) const
 size_t
 PFCounter::ne(var_t&& t_) const
 {
-  return compute(t_, NE);
+  return compute(t_, Compare::NE);
 }
 
 /*!
@@ -1154,7 +1152,7 @@ PFCounter::ne(var_t&& t_) const
 size_t
 PFCounter::betweenAND(var_t&& t_min, var_t&& t_max) const
 {
-  return compute(t_min, t_max, BTWAND);
+  return compute(t_min, t_max, Compare::BTWAND);
 }
 
 /*!
@@ -1170,7 +1168,7 @@ PFCounter::betweenAND(var_t&& t_min, var_t&& t_max) const
 size_t
 PFCounter::betweenOR(var_t&& t_min, var_t&& t_max) const
 {
-  return compute(t_min, t_max, BTWOR);
+  return compute(t_min, t_max, Compare::BTWOR);
 }
 
 /*!
@@ -1866,28 +1864,30 @@ PFSummary::printGrandTotals()
  * \param ipver_ Ip version.
  */
 void
-PFSummary::printTabReasonByAction(enum ProtoID id_, const int ipver_)
+PFSummary::printTabReasonByAction(ProtoID id_, const int ipver_)
 {
   const std::string sep(80, '=');
   std::cout << "Hostname: ["
             << (info_t.hostname.empty() ? "All" : info_t.hostname) << "]\n";
   std::cout << "IP Version: [" << ipver_ << "] Protocol: ["
-            << (id_ == ProtoTCP    ? "TCP"
-                : id_ == ProtoUDP  ? "UDP"
-                : id_ == ProtoIGMP ? "IGMP"
-                : id_ == ProtoCARP ? "CARP"
-                : id_ == ICMPv4    ? "ICMP v4"
-                : id_ == ICMPv6    ? "ICMP v6"
-                                   : "")
+            << (id_ == ProtoID::ProtoTCP    ? "TCP"
+                : id_ == ProtoID::ProtoUDP  ? "UDP"
+                : id_ == ProtoID::ProtoIGMP ? "IGMP"
+                : id_ == ProtoID::ProtoCARP ? "CARP"
+                : id_ == ProtoID::ICMPv4    ? "ICMP v4"
+                : id_ == ProtoID::ICMPv6    ? "ICMP v6"
+                                            : "")
             << "]\n";
   std::cout << "Total Unique Ip Addresses - Source: " << uniq_ip_src.size()
             << " Destination: " << uniq_ip_dst.size() << "\n";
   std::cout << "Total in Range: ";
-  if (id_ == ProtoTCP) {
-    std::cout << (ipver_ == IPv4 ? results_t.accTcp4 : results_t.accTcp6)
+  if (id_ == ProtoID::ProtoTCP) {
+    std::cout << (ipver_ == IPVersion::IPv4 ? results_t.accTcp4
+                                            : results_t.accTcp6)
               << "\n\n";
-  } else if (id_ == ProtoUDP) {
-    std::cout << (ipver_ == IPv4 ? results_t.accUdp4 : results_t.accUdp6)
+  } else if (id_ == ProtoID::ProtoUDP) {
+    std::cout << (ipver_ == IPVersion::IPv4 ? results_t.accUdp4
+                                            : results_t.accUdp6)
               << "\n";
     std::cout << "Acc. Data Length: " << results_t.accUdpDataLen << "\n\n";
   }
@@ -1953,7 +1953,7 @@ PFSummary::compute(ForwardIt iter_, enum ProtoID id_, const int ipver_)
   for (auto it_ = iter_.first; it_ != iter_.second; ++it_) {
     if (it_->second.ip_version == ipver_ && it_->second.proto_id == id_) {
       if (info_t.hostname.empty()) { // all
-        (ipver_ == IPv4) ? results_t.accUdp4++ : results_t.accUdp6++;
+        (ipver_ == IPVersion::IPv4) ? results_t.accUdp4++ : results_t.accUdp6++;
         results_t.accUdpDataLen += it_->second.data_len;
 
         if (info_t.ifname.empty()) {
@@ -1967,7 +1967,7 @@ PFSummary::compute(ForwardIt iter_, enum ProtoID id_, const int ipver_)
         }
 
       } else if (info_t.hostname == it_->second.hostname) { // hostname only
-        (ipver_ == IPv4) ? results_t.accUdp4++ : results_t.accUdp6++;
+        (ipver_ == IPVersion::IPv4) ? results_t.accUdp4++ : results_t.accUdp6++;
         results_t.accUdpDataLen += it_->second.data_len;
 
         if (info_t.ifname.empty()) {
@@ -1999,7 +1999,7 @@ PFSummary::compute(ForwardIt lower_,
   for (it_ = lower_; it_ != upper_; ++it_) {
     if (it_->second.ip_version == ipver_ && it_->second.proto_id == id_) {
       if (info_t.hostname.empty()) { // all
-        (ipver_ == IPv4) ? results_t.accUdp4++ : results_t.accUdp6++;
+        (ipver_ == IPVersion::IPv4) ? results_t.accUdp4++ : results_t.accUdp6++;
         results_t.accUdpDataLen += it_->second.data_len;
 
         if (info_t.ifname.empty()) {
@@ -2013,7 +2013,7 @@ PFSummary::compute(ForwardIt lower_,
         }
 
       } else if (info_t.hostname == it_->second.hostname) { // only hostname
-        (ipver_ == IPv4) ? results_t.accUdp4++ : results_t.accUdp6++;
+        (ipver_ == IPVersion::IPv4) ? results_t.accUdp4++ : results_t.accUdp6++;
         results_t.accUdpDataLen += it_->second.data_len;
 
         if (info_t.ifname.empty()) {
@@ -2103,13 +2103,13 @@ PFSummary::reportHeader()
   std::cout << "Real Ifname: [" << std::setw(10) << std::left
             << (info_t.ifname.empty() ? "All" : info_t.ifname)
             << "] Protocol/Version: [" << std::setw(7) << std::left
-            << (info_t.proto_id == ProtoTCP    ? "TCP"
-                : info_t.proto_id == ProtoUDP  ? "UDP"
-                : info_t.proto_id == ProtoIGMP ? "IGMP"
-                : info_t.proto_id == ProtoCARP ? "CARP"
-                : info_t.proto_id == ICMPv4    ? "ICMP v4"
-                : info_t.proto_id == ICMPv6    ? "ICMP v6"
-                                               : "")
+            << (info_t.proto_id == ProtoID::ProtoTCP    ? "TCP"
+                : info_t.proto_id == ProtoID::ProtoUDP  ? "UDP"
+                : info_t.proto_id == ProtoID::ProtoIGMP ? "IGMP"
+                : info_t.proto_id == ProtoID::ProtoCARP ? "CARP"
+                : info_t.proto_id == ProtoID::ICMPv4    ? "ICMP v4"
+                : info_t.proto_id == ProtoID::ICMPv6    ? "ICMP v6"
+                                                        : "")
             << "]/[" << std::setw(1) << std::left << info_t.ip_version << "]\n"
             << sep << "\n\n";
 }
@@ -2126,7 +2126,7 @@ PFSummary::reportHdrDetails()
 
   std::cout.width(20);
   std::cout << "Time Stamp";
-  if (info_t.ip_version == 4) {
+  if (info_t.ip_version == IPVersion::IPv4) {
     std::cout.width(22);
     std::cout << "Source:Port";
     std::cout.width(28);
@@ -2350,7 +2350,7 @@ PFSummary::print(ForwardIt it_)
   std::strftime(buf_, 20, "%Y-%m-%d %T", &it_->second.header.tm_time);
   std::cout << buf_ << " ";
 
-  if (info_t.ip_version == IPv4) {
+  if (info_t.ip_version == IPVersion::IPv4) {
     std::cout.width(22);
     std::cout << (it_->second.ip_src_addr);
     std::cout.width(27);
@@ -2359,7 +2359,7 @@ PFSummary::print(ForwardIt it_)
     s[0] = std::toupper(it_->second.action[0]);
     std::cout << s[0] << " " << it_->second.direction << "\n";
     lin++;
-  } else if (info_t.ip_version == IPv6) {
+  } else if (info_t.ip_version == IPVersion::IPv6) {
     std::cout << "Src: ";
     std::cout.width(46);
     std::cout << std::left << "[" + it_->second.ip_src_addr + "]";
@@ -2372,19 +2372,19 @@ PFSummary::print(ForwardIt it_)
   }
 
   switch (info_t.proto_id) {
-    case ProtoHOPOPT:
+    case ProtoID::ProtoHOPOPT:
       [[fallthrough]];
-    case ProtoUDP:
+    case ProtoID::ProtoUDP:
       [[fallthrough]];
-    case ProtoTCP: {
-      if (info_t.ip_version == IPv4) {
-        if (info_t.proto_id == ProtoUDP) {
+    case ProtoID::ProtoTCP: {
+      if (info_t.ip_version == IPVersion::IPv4) {
+        if (info_t.proto_id == ProtoID::ProtoUDP) {
           std::cout << "                    Data Length: [" << std::setw(10)
                     << std::right << it_->second.data_len << "]\n";
           lin++;
         }
-      } else if (info_t.ip_version == IPv6) {
-        if (info_t.proto_id == ProtoUDP) {
+      } else if (info_t.ip_version == IPVersion::IPv6) {
+        if (info_t.proto_id == ProtoID::ProtoUDP) {
           std::cout << "                    Data Length: [" << std::setw(10)
                     << std::right << it_->second.data_len << "]\n";
           lin++;
@@ -2392,7 +2392,7 @@ PFSummary::print(ForwardIt it_)
       }
       break;
     }
-    case ICMPv4: {
+    case ProtoID::ICMPv4: {
       std::cout.width(32);
       std::cout << "Type";
       std::cout << " Echo-type\n";
@@ -2423,9 +2423,9 @@ PFSummary::print(ForwardIt it_)
       lin++;
       break;
     }
-    case ProtoIGMP:
+    case ProtoID::ProtoIGMP:
       break;
-    case ProtoCARP: {
+    case ProtoID::ProtoCARP: {
       std::cout << "Type    : " << std::setw(10) << std::setfill(' ')
                 << it_->second.carp.type << " TTL: " << std::setw(10)
                 << std::setfill(' ') << it_->second.carp.ttl
