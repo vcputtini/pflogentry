@@ -1,0 +1,3 @@
+* thu dec 09 2021 PFlogentry <vcputtini@gmail.com>
+- Improved standardization of the use of enumerations.
+- Minor cleanups.
