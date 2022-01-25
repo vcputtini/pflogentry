@@ -228,7 +228,11 @@ PFLogentry::split(const std::string&& s_, const char sep_)
 
 /*!
  * \brief Converts log entries to XML format and writes to file.
- * \param fn File name with path
+ * \param fn File name with path (Mandatory).
+ * \param Beginning date
+ * \param Beginning time
+ * \param End date
+ * \param End time
  * \note If the user does not inform the '.xml' extension, the library will
  * provide it. If another extension is informed, it will not be considered valid
  * and the function will return -1.
@@ -236,26 +240,52 @@ PFLogentry::split(const std::string&& s_, const char sep_)
  * after writing the XML file.
  */
 PFLogentry::PFLError
-PFLogentry::toXML(const std::string fn_)
+PFLogentry::toXML(const std::string&& fn_,
+                  const std::string&& d0_,
+                  const std::string&& t0_,
+                  const std::string&& d1_,
+                  const std::string&& t1_)
 {
-  if (pflError == PFLError::PFL_SUCCESS) {
-    if (filter_m.size() != 0) {
-      PFRawToXML xml(log_fmt_);
-      if (xml.save(fn_) != PFLError::PFL_SUCCESS) {
-        setError(PFLError::PFL_ERR_XML_FILE_NAME_INCONSISTENT);
-        return PFLError::PFL_ERR_XML_FILE_NAME_INCONSISTENT;
+  if (fn_.empty()) {
+    setError(PFLError::PFL_ERR_XML_FILE_NAME_INCONSISTENT);
+    return PFLError::PFL_ERR_XML_FILE_NAME_INCONSISTENT;
+  }
+  if ((pflError == PFLError::PFL_SUCCESS) && (filter_m.size() != 0)) {
+
+    PFRawToXML xml(log_fmt_);
+
+    if (xml.save(fn_) != PFLError::PFL_SUCCESS) {
+      setError(PFLError::PFL_ERR_XML_FILE_NAME_INCONSISTENT);
+      return PFLError::PFL_ERR_XML_FILE_NAME_INCONSISTENT;
+    }
+
+    if ((!d0_.empty() && !t0_.empty()) && (!d1_.empty() && !t1_.empty())) {
+      struct std::tm tm_begin = {};
+      struct std::tm tm_end = {};
+      tm_begin = mkTime(d0_, t0_);
+      tm_end = mkTime(d1_, t1_);
+      auto lower_ = filter_m.lower_bound(std::move(std::mktime(&tm_begin)));
+      auto upper_ = filter_m.upper_bound(std::move(std::mktime(&tm_end)));
+      std::multimap<int, LogData>::iterator it_;
+      for (it_ = lower_; it_ != upper_; ++it_) {
+        if (!it_->second.hostname.empty()) {
+          xml.append(it_->second);
+        }
       }
+    } else {
       for (auto& a : filter_m) {
         if (!a.second.hostname.empty()) {
           xml.append(a.second);
         };
       }
-      if (xml.close() != PFLError::PFL_SUCCESS) {
-        setError(PFLError::PFL_ERR_XML_FILE_NOT_SAVE);
-        return PFLError::PFL_ERR_XML_FILE_NOT_SAVE;
-      }
+    }
+
+    if (xml.close() != PFLError::PFL_SUCCESS) {
+      setError(PFLError::PFL_ERR_XML_FILE_NOT_SAVE);
+      return PFLError::PFL_ERR_XML_FILE_NOT_SAVE;
     }
   }
+
   return pflError;
 }
 
@@ -635,6 +665,56 @@ PFLogentry::parse()
 
 /*!
  * \internal
+ * \brief Checks if the date is in ISO format.
+ * \param d_ Valid format ISO yyyy-mm-dd
+ * \return bool true|false
+ */
+bool
+PFLogentry::isValidDate(const std::string d_) const
+{
+  if (!d_.empty()) {
+    std::regex re_date_("^([0-9]{4})-([0-9]{2})-([0-9]{2})$");
+    std::smatch smatches_;
+    if (std::regex_match(d_, smatches_, re_date_)) {
+      auto [y_, m_, d_] = std::tuple(std::stoi(smatches_[1]),
+                                     std::stoi(smatches_[2]),
+                                     std::stoi(smatches_[3]));
+      if ((y_ > 1900 && y_ <= 2038) && (m_ >= 1 && m_ <= 12) &&
+          (d_ >= 1 && d_ <= 31)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+/*!
+ * \internal
+ * \brief Checks if the time is in hh:mm:ss format.
+ * \param t_
+ * \return bool true|false
+ */
+bool
+PFLogentry::isValidTime(const std::string t_) const
+{
+  if (!t_.empty()) {
+    std::regex re_time_("^([0-9]{2}):([0-9]{2}):([0-9]{2})$");
+    std::smatch smatches_;
+    if (std::regex_match(t_, smatches_, re_time_)) {
+      auto [h_, m_, s_] = std::tuple(std::stoi(smatches_[1]),
+                                     std::stoi(smatches_[2]),
+                                     std::stoi(smatches_[3]));
+      if ((h_ >= 0 && h_ <= 23) && (m_ >= 0 && m_ <= 59) &&
+          (s_ >= 0 && s_ <= 59)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+/*!
+ * \internal
  * \brief Parses date and time strings and save the values inside std::tm.
  * \param d_ Date (yyyy-mm-dd)
  * \param t_ Time (hh:mm:ss)
@@ -644,19 +724,20 @@ std::tm
 PFLogentry::mkTime(const std::string d_, const std::string t_) const
 {
   struct std::tm tm_tmp = {};
-  auto [yy, mm, dd, hh, mn, ss] = std::tuple(std::stoi(d_.substr(0, 4)),
-                                             std::stoi(d_.substr(5, 2)),
-                                             std::stoi(d_.substr(8, 2)),
-                                             std::stoi(t_.substr(0, 2)),
-                                             std::stoi(t_.substr(3, 2)),
-                                             std::stoi(t_.substr(6, 2)));
-  tm_tmp.tm_year = std::move(yy) - 1900;
-  tm_tmp.tm_mon = std::move(mm) - 1;
-  tm_tmp.tm_mday = std::move(dd);
-  tm_tmp.tm_hour = std::move(hh);
-  tm_tmp.tm_min = std::move(mn);
-  tm_tmp.tm_sec = std::move(ss);
-
+  if (isValidDate(d_) && isValidTime(t_)) {
+    auto [yy, mm, dd, hh, mn, ss] = std::tuple(std::stoi(d_.substr(0, 4)),
+                                               std::stoi(d_.substr(5, 2)),
+                                               std::stoi(d_.substr(8, 2)),
+                                               std::stoi(t_.substr(0, 2)),
+                                               std::stoi(t_.substr(3, 2)),
+                                               std::stoi(t_.substr(6, 2)));
+    tm_tmp.tm_year = std::move(yy) - 1900;
+    tm_tmp.tm_mon = std::move(mm) - 1;
+    tm_tmp.tm_mday = std::move(dd);
+    tm_tmp.tm_hour = std::move(hh);
+    tm_tmp.tm_min = std::move(mn);
+    tm_tmp.tm_sec = std::move(ss);
+  }
   return tm_tmp;
 }
 
@@ -942,7 +1023,6 @@ PFLogentry::uint32Fields(Fields f_, const LogData& d_) const
       break;
     case Fields::IcmpTTime:
       val_ = d_.icmp.ttime;
-      break;
   }
   return val_;
 }
@@ -1033,7 +1113,6 @@ PFLogentry::strFields(Fields f_, const LogData& d_) const
       break;
     case Fields::CarpType:
       r = d_.carp.type;
-      break;
   }
   return r;
 }
@@ -1346,22 +1425,33 @@ PFQuery::select(const std::string&& d0_,
 {
 
   if ((!d0_.empty() && !t0_.empty()) && (d1_.empty() && t1_.empty())) { // a,b
-    info_t.tm_begin = mkTime(d0_, t0_);
-    info_t.tm_end = {};
-    info_t.flag = true;
+    if (isValidDate(d0_) && isValidTime(t0_)) {
+      info_t.tm_begin = mkTime(d0_, t0_);
+      info_t.tm_end = {};
+      info_t.flag = true;
+    } else {
+      setError(PFLError::PFL_ERR_INVALID_DATE_TIME_FORMAT);
+    }
   } else if ((!d0_.empty() && !t0_.empty()) &&
              (!d1_.empty() && !t1_.empty())) { // a,b, a1, b1
-    info_t.tm_begin = {};
-    info_t.tm_end = {};
-    info_t.tm_begin = mkTime(d0_, t0_);
-    info_t.tm_end = mkTime(d1_, t1_);
-    if (std::mktime(&info_t.tm_begin) > std::mktime(&info_t.tm_end)) {
-      setError(PFLError::PFL_ERR_ARG1_GT_ARG2);
+    if (isValidDate(d0_) && isValidTime(t0_) && isValidDate(d1_) &&
+        isValidTime(t1_)) {
+
+      info_t.tm_begin = {};
+      info_t.tm_end = {};
+      info_t.tm_begin = mkTime(d0_, t0_);
+      info_t.tm_end = mkTime(d1_, t1_);
+      if (std::mktime(&info_t.tm_begin) > std::mktime(&info_t.tm_end)) {
+        setError(PFLError::PFL_ERR_ARG1_GT_ARG2);
+      }
+      info_t.flag = false;
+    } else {
+      setError(PFLError::PFL_ERR_INVALID_DATE_TIME_FORMAT);
     }
-    info_t.flag = false;
   } else {
     setError(PFLError::PFL_ERR_INCOMPLETE_NUM_ARGS);
   }
+
   return *this;
 }
 
@@ -1864,12 +1954,12 @@ PFSummary::printGrandTotals()
  * \param ipver_ Ip version.
  */
 void
-PFSummary::printTabReasonByAction(ProtoID id_, const int ipver_)
+PFSummary::printTabReasonByAction(ProtoID id_, IPVersion ipver_)
 {
   const std::string sep(80, '=');
   std::cout << "Hostname: ["
             << (info_t.hostname.empty() ? "All" : info_t.hostname) << "]\n";
-  std::cout << "IP Version: [" << ipver_ << "] Protocol: ["
+  std::cout << "IP Version: [" << static_cast<int>(ipver_) << "] Protocol: ["
             << (id_ == ProtoID::ProtoTCP    ? "TCP"
                 : id_ == ProtoID::ProtoUDP  ? "UDP"
                 : id_ == ProtoID::ProtoIGMP ? "IGMP"
@@ -1948,10 +2038,11 @@ PFSummary::printTabReasonByAction(ProtoID id_, const int ipver_)
  */
 template<typename ForwardIt>
 void
-PFSummary::compute(ForwardIt iter_, enum ProtoID id_, const int ipver_)
+PFSummary::compute(ForwardIt iter_, enum ProtoID id_, IPVersion ipver_)
 {
   for (auto it_ = iter_.first; it_ != iter_.second; ++it_) {
-    if (it_->second.ip_version == ipver_ && it_->second.proto_id == id_) {
+    if (static_cast<IPVersion>(it_->second.ip_version) == ipver_ &&
+        it_->second.proto_id == id_) {
       if (info_t.hostname.empty()) { // all
         (ipver_ == IPVersion::IPv4) ? results_t.accUdp4++ : results_t.accUdp6++;
         results_t.accUdpDataLen += it_->second.data_len;
@@ -1993,11 +2084,12 @@ void
 PFSummary::compute(ForwardIt lower_,
                    ForwardIt upper_,
                    enum ProtoID id_,
-                   const int ipver_)
+                   IPVersion ipver_)
 {
   std::multimap<int, LogData>::iterator it_;
   for (it_ = lower_; it_ != upper_; ++it_) {
-    if (it_->second.ip_version == ipver_ && it_->second.proto_id == id_) {
+    if (it_->second.ip_version == static_cast<int>(ipver_) &&
+        it_->second.proto_id == id_) {
       if (info_t.hostname.empty()) { // all
         (ipver_ == IPVersion::IPv4) ? results_t.accUdp4++ : results_t.accUdp6++;
         results_t.accUdpDataLen += it_->second.data_len;
@@ -2110,7 +2202,8 @@ PFSummary::reportHeader()
                 : info_t.proto_id == ProtoID::ICMPv4    ? "ICMP v4"
                 : info_t.proto_id == ProtoID::ICMPv6    ? "ICMP v6"
                                                         : "")
-            << "]/[" << std::setw(1) << std::left << info_t.ip_version << "]\n"
+            << "]/[" << std::setw(1) << std::left
+            << static_cast<int>(info_t.ip_version) << "]\n"
             << sep << "\n\n";
 }
 
@@ -2167,7 +2260,7 @@ PFSummary::reportDetails()
     reportHdrDetails();
     int lin = 0;
     for (auto it_ = range_a.first; it_ != range_a.second; ++it_) {
-      if (it_->second.ip_version == info_t.ip_version &&
+      if (static_cast<IPVersion>(it_->second.ip_version) == info_t.ip_version &&
           it_->second.proto_id == info_t.proto_id) {
         if (info_t.hostname.empty()) {
           lin = print(it_);
@@ -2191,7 +2284,7 @@ PFSummary::reportDetails()
     reportHdrDetails();
     int lin = 0;
     for (it_ = lower_; it_ != upper_; ++it_) {
-      if (it_->second.ip_version == info_t.ip_version &&
+      if (static_cast<IPVersion>(it_->second.ip_version) == info_t.ip_version &&
           it_->second.proto_id == info_t.proto_id) {
         if (info_t.hostname.empty()) {
           lin = print(it_);
@@ -2235,7 +2328,8 @@ PFSummary::printUnique(TSet set_, TMin min_, TMax max_)
           min_, max_, [&ip_, &cntIn_, &cntOut_, this](const filter_pair_ d_) {
             if ((ip_ == d_.second.ip_src_addr) &&
                 (this->info_t.proto_id == d_.second.proto_id) &&
-                (this->info_t.ip_version == d_.second.ip_version)) {
+                (this->info_t.ip_version ==
+                 static_cast<IPVersion>(d_.second.ip_version))) {
               if (this->info_t.ifname.empty()) {
                 if (this->info_t.hostname.empty()) {
                   (d_.second.direction == "in" ? ++cntIn_ : ++cntOut_);
@@ -2284,7 +2378,8 @@ PFSummary::printUnique(TSet set_, TMin min_, TMax max_)
         for (auto it_ = min_; it_ != max_; ++it_) {
           if ((ip_ == it_->second.ip_src_addr) &&
               (info_t.proto_id == it_->second.proto_id) &&
-              (info_t.ip_version == it_->second.ip_version)) {
+              (info_t.ip_version ==
+               static_cast<IPVersion>(it_->second.ip_version))) {
             if (info_t.ifname.empty()) {
               if (info_t.hostname.empty()) {
                 s_port.insert(it_->second.src_port);

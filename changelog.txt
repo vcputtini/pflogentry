@@ -15,6 +15,9 @@
   be considered valid. 
 - std::tm PFLogentry::mkTime(const std::string d_, const std::string t_)
 const, now checks if date/time is in valid format.
+- PFQuery& PFQuery::select(const std::string&& d0_, const std::string&& t0_,
+                const std::string&& d1_, const std::string&& t1_),
+  Added validation on the date and time entered by the user.
 
 * mon jan 21 2022 PFlogentry <vcputtini@gmail.com>
 - Improvement in details in certain comments.

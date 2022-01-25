@@ -83,6 +83,8 @@ namespace pflogentry {
 
 /*!
  * \brief The FilterData class, contains options and data definitions.
+ * \note More details:
+ * https://docs.netgate.com/pfsense/en/latest/monitoring/logs/raw-filter-format.html
  */
 struct PFLogentry_EXPORT FilterData
 {
@@ -208,7 +210,7 @@ struct PFLogentry_EXPORT FilterData
    * \enum This enum contains the options to set the behavior of internal
    * functions, as well as choosing the behavior by user.
    */
-  enum IPVersion
+  enum class IPVersion
   {
     IPv4 = 4, //!< IP version 4
     IPv6 = 6  //!< IP version 6
@@ -221,11 +223,11 @@ struct PFLogentry_EXPORT FilterData
   {
     ProtoHOPOPT = 0, //!< IPv6 Hop-by-Hop Option [RFC8200]
     ProtoIGMP = 2,   //!< IGMP
-    ProtoCARP = 112, //!< CARP
     ProtoTCP = 6,    //!< IGMP
     ProtoUDP = 17,   //!< UDP
     ICMPv4 = 1,      //!< ICMP v4
     ICMPv6 = 58,     //!< ICMP v6
+    ProtoCARP = 112, //!< CARP
   };
 
   enum ICMPType
@@ -335,6 +337,9 @@ struct PFLogentry_EXPORT FilterData
     PFL_ERR_ARG1_GT_ARG2,
     PFL_ERR_INCOMPLETE_NUM_ARGS,
     PFL_ERR_INDEX_OUT_OF_RANGE,
+    PFL_ERR_INVALID_DATE_FORMAT,
+    PFL_ERR_INVALID_TIME_FORMAT,
+    PFL_ERR_INVALID_DATE_TIME_FORMAT,
     PFL_ERR_PARSE_INVALID_LINE,
     PFL_ERR_PARSE_INVALID_RULENUM,
     PFL_ERR_PARSE_INVALID_PROTOCOL,
@@ -352,6 +357,12 @@ struct PFLogentry_EXPORT FilterData
     { PFLError::PFL_ERR_INCOMPLETE_NUM_ARGS,
       "Incomplete Number of Arguments." },
     { PFLError::PFL_ERR_INDEX_OUT_OF_RANGE, "Index Out of Range." },
+    { PFLError::PFL_ERR_INVALID_DATE_FORMAT,
+      "Date is not in ISO format (yyyy-mm-dd)." },
+    { PFLError::PFL_ERR_INVALID_TIME_FORMAT,
+      "Time is not in hh:mm:ss format." },
+    { PFLError::PFL_ERR_INVALID_DATE_TIME_FORMAT,
+      "Date (yyyy-mm-dd) and/or time (hh:mm:ss) are not in valid format.." },
     { PFLError::PFL_ERR_PARSE_INVALID_LINE, "Invalid log line." },
     { PFLError::PFL_ERR_PARSE_INVALID_RULENUM,
       "Rule Number must greater than zero." },
@@ -408,7 +419,12 @@ public:
   PFLogentry& append(const std::string& raw_log_);
   void clear();
   size_t size() const;
-  PFLError toXML(const std::string fn_);
+  // PFLError toXML(const std::string fn_);
+  PFLError toXML(const std::string&& fn_ = std::string(),
+                 const std::string&& d0_ = std::string(),
+                 const std::string&& t0_ = std::string(),
+                 const std::string&& d1_ = std::string(),
+                 const std::string&& t1_ = std::string());
 
   PFLError errorNum() const noexcept;
   std::string getErrorText() const;
@@ -485,7 +501,7 @@ protected:
   LogData log_data;
   using filter_pair_ = std::pair<int, LogData>;
   using range_mmap_it = std::multimap<int, LogData>::const_iterator;
-  std::multimap<int, LogData> filter_m{};
+  std::multimap<int, LogData> filter_m = {};
 
   inline LogFormat logFormat();
   [[maybe_unused]] long toLong(const std::string&& s_) const;
@@ -495,6 +511,9 @@ protected:
   PFLError parse();
 
   std::tm mkTime(const std::string d_, const std::string t_) const;
+
+  bool isValidDate(const std::string d_) const;
+  bool isValidTime(const std::string t_) const;
 
   int compareDT(const std::string tm_end_,
                 const std::string tm_beginning_) const;
@@ -646,8 +665,8 @@ private:
     struct std::tm tm_end = {};
     std::string hostname = {};
     std::string ifname = {};
-    enum ProtoID proto_id;
-    int ip_version = {};
+    ProtoID proto_id;
+    IPVersion ip_version = {};
   } info_t;
 
   struct Results
@@ -665,17 +684,17 @@ private:
                            const std::string reason_,
                            const std::string action_);
   template<typename ForwardIt>
-  void compute(ForwardIt iter_, ProtoID id_, const int ipver_);
+  void compute(ForwardIt iter_, ProtoID id_, IPVersion ipver_);
 
   template<typename ForwardIt>
   void compute(ForwardIt lower_,
                ForwardIt upper_,
                ProtoID id_,
-               const int ipver_);
+               IPVersion ipver_);
 
   inline void heading();
   void printGrandTotals();
-  void printTabReasonByAction(ProtoID id_, const int ipver_);
+  void printTabReasonByAction(ProtoID id_, IPVersion ipver_);
 
   void reportHeader();
   void reportHdrDetails();
