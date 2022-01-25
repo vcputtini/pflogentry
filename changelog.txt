@@ -1,3 +1,29 @@
+* mon jan 25 2022 PFlogentry <vcputtini@gmail.com>
+- PFLogentry::toXML(const std::string fn_) changed to:
+	PFLogentry::toXML(const std::string&& fn_,
+        	          const std::string&& d0_,
+                	  const std::string&& t0_,
+	                  const std::string&& d1_,
+        	          const std::string&& t1_);
+  Added the ability to filter by date and time the entries that will be
+  exported to XML format.
+- Update examples/ex-rawtoxml.cc
+- Added bool PFLogentry::isValidDate(const std::string d_) const and
+  bool PFLogentry::isValidTime(const std::string t_) const
+  Basic checking of date and time formats. Date must be in ISO format and time in
+  the range of 00:00:00 to 23:59:59. If the time default is 12H, it will also
+  be considered valid. 
+- std::tm PFLogentry::mkTime(const std::string d_, const std::string t_)
+const, now checks if date/time is in valid format.
+
+* mon jan 21 2022 PFlogentry <vcputtini@gmail.com>
+- Improvement in details in certain comments.
+- Fixed for correct representation of data types of some variables within
+structures.
+
+* mon dec 20 2021 PFlogentry <vcputtini@gmail.com>
+- Continuing improve standardization of the use of enumerations.
+
 * thu dec 09 2021 PFlogentry <vcputtini@gmail.com>
 - Improved standardization of the use of enumerations.
 - Minor cleanups.
