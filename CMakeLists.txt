@@ -17,7 +17,7 @@ set_target_properties(pflogentry PROPERTIES VERSION ${PROJECT_VERSION}
     PUBLIC_HEADER pflogentry.h)
 
 find_package(tinyxml2 REQUIRED)
-add_compile_options(-Wall -O2)
+add_compile_options(-Wall -O2 -fPIC)
 
 target_include_directories(pflogentry PRIVATE .)
 set_target_properties(pflogentry PROPERTIES PUBLIC_HEADER pflogentry.h)
