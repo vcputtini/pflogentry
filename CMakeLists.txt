@@ -4,6 +4,7 @@ project(pflogentry LANGUAGES CXX VERSION 1.0 DESCRIPTION "pfSense Filter Log Ana
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS_RELEASE "-O2 -Wall")
 
 file(WRITE "${CMAKE_SOURCE_DIR}/QtCreatorDeployment.txt" "<deployment/prefix>\n")
 
@@ -17,7 +18,6 @@ set_target_properties(pflogentry PROPERTIES VERSION ${PROJECT_VERSION}
     PUBLIC_HEADER pflogentry.h)
 
 find_package(tinyxml2 REQUIRED)
-add_compile_options(-Wall -O2 -fPIC)
 
 target_include_directories(pflogentry PRIVATE .)
 set_target_properties(pflogentry PROPERTIES PUBLIC_HEADER pflogentry.h)
