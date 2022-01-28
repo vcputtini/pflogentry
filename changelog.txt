@@ -1,3 +1,14 @@
+* fri jan 28 2022 PFlogentry <vcputtini@gmail.com>
+ - CMakeLists.txt improvements.
+ - Fixed the initialization order of variables in object constructors.
+ - Fixed compilation warnings about unused variables
+
+* tue jan 26 2022 PFlogentry <vcputtini@gmail.com>
+- Added checking the validity of the date/time informed by the user
+  in the function: 
+  PFLogentry::PFLError PFSummary::setDateTime(const std::string&& d0_,
+  const std::string&& t0_, const std::string&& d1_, const std::string&& t1_).
+
 * mon jan 25 2022 PFlogentry <vcputtini@gmail.com>
 - PFLogentry::toXML(const std::string fn_) changed to:
 	PFLogentry::toXML(const std::string&& fn_,
