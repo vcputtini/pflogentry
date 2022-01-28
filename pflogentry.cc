@@ -223,7 +223,7 @@ PFLogentry::split(const std::string&& s_, const char sep_)
     std::getline(ss, tok, sep_);
     result.push_back(std::move(tok));
   }
-  return std::move(result);
+  return result;
 }
 
 /*!
@@ -1264,8 +1264,10 @@ PFCounter::size() const
  * \internal
  * \brief Calculates the count of entries, based on the type of data and the
  * logical operator entered. Is used in the logical operations: eq(), lt(),
- * gt() le() and ge(). \param t_ Data value. \param comp_ Operator. \return
- * size_t Count of log entries.
+ * gt() le() and ge().
+ * \param t_ Data value.
+ * \param comp_ Operator.
+ * \return size_t Count of log entries.
  */
 size_t
 PFCounter::compute(var_t t_, Compare comp_) const
@@ -1397,8 +1399,9 @@ PFCounter::compute(var_t t_min, var_t t_max, Compare comp_) const
  * \brief Constructs a PFQuery object (default).
  */
 PFQuery::PFQuery()
-  : log_data_v_({})
-  , pflError(PFLError::PFL_SUCCESS){};
+  : pflError(PFLError::PFL_SUCCESS)
+  , log_data_v_({})
+{}
 
 /*!
  * \brief Constructs a PFQuary object.
@@ -1406,8 +1409,8 @@ PFQuery::PFQuery()
  */
 PFQuery::PFQuery(PFLogentry* pf_)
   : PFLogentry(*pf_)
-  , log_data_v_({})
   , pflError(PFLError::PFL_SUCCESS)
+  , log_data_v_({})
 {}
 
 /*!
@@ -1678,9 +1681,9 @@ PFQuery::exists(Fields fld_, Compare comp_, Visitor::var_t&& t_)
           uint32Fields(fld_, d_.second), std::get<uint32_t>(t_), comp_);
       });
   } else if (typevar == TypeVar::TString) {
-    if (fld == Fields::HdrTimeStamp) {
+    if (fld_ == Fields::HdrTimeStamp) {
       result_ = std::find_if(
-        ibegin_m, iend_m, [&fld_, &comp_, &t_, *this](const filter_pair_ d_) {
+        ibegin_m, iend_m, [&comp_, &t_, *this](const filter_pair_ d_) {
           switch (comp_) {
             case EQ:
               if (this->compareDT(d_.second.header.time,
@@ -1719,9 +1722,9 @@ PFQuery::exists(Fields fld_, Compare comp_, Visitor::var_t&& t_)
  */
 PFSummary::PFSummary(PFLogentry* pf_)
   : PFLogentry(*pf_)
+  , pflError(PFLError::PFL_SUCCESS)
   , lines_per_page_(50 - lines_header)
   , info_t({})
-  , pflError(PFLError::PFL_SUCCESS)
 {}
 
 /*!
@@ -1743,20 +1746,29 @@ PFSummary::setDateTime(const std::string&& d0_,
   pflError = PFLError::PFL_SUCCESS;
 
   if ((!d0_.empty() && !t0_.empty()) && (d1_.empty() && t1_.empty())) { // a,b
-    info_t.tm_begin = mkTime(d0_, t0_);
-    info_t.tm_end = {};
-    info_t.flag = true;
+    if (isValidDate(d0_) && isValidTime(t0_)) {
+      info_t.tm_begin = mkTime(d0_, t0_);
+      info_t.tm_end = {};
+      info_t.flag = true;
+    } else {
+      setError(PFLError::PFL_ERR_INVALID_DATE_TIME_FORMAT);
+    }
   } else if ((!d0_.empty() && !t0_.empty()) &&
              (!d1_.empty() && !t1_.empty())) { // a,b, a1, b1
-    info_t.tm_begin = {};
-    info_t.tm_end = {};
-    info_t.tm_begin = mkTime(d0_, t0_);
-    info_t.tm_end = mkTime(d1_, t1_);
-    if (std::mktime(&info_t.tm_begin) > std::mktime(&info_t.tm_end)) {
-      setError(PFLError::PFL_ERR_ARG1_GT_ARG2);
-      return PFLError::PFL_ERR_ARG1_GT_ARG2;
+    if (isValidDate(d0_) && isValidTime(t0_) && isValidDate(d1_) &&
+        isValidTime(t1_)) {
+      info_t.tm_begin = {};
+      info_t.tm_end = {};
+      info_t.tm_begin = mkTime(d0_, t0_);
+      info_t.tm_end = mkTime(d1_, t1_);
+      if (std::mktime(&info_t.tm_begin) > std::mktime(&info_t.tm_end)) {
+        setError(PFLError::PFL_ERR_ARG1_GT_ARG2);
+        return PFLError::PFL_ERR_ARG1_GT_ARG2;
+      }
+      info_t.flag = false;
+    } else {
+      setError(PFLError::PFL_ERR_INVALID_DATE_TIME_FORMAT);
     }
-    info_t.flag = false;
   } else {
     setError(PFLError::PFL_ERR_INCOMPLETE_NUM_ARGS);
     return PFLError::PFL_ERR_INCOMPLETE_NUM_ARGS;
@@ -2324,7 +2336,7 @@ PFSummary::printUnique(TSet set_, TMin min_, TMax max_)
       for (auto& ip_ : set_) {
         int cntIn_ = 0;
         int cntOut_ = 0;
-        const int i = std::count_if(
+        [[maybe_unused]] const int i = std::count_if(
           min_, max_, [&ip_, &cntIn_, &cntOut_, this](const filter_pair_ d_) {
             if ((ip_ == d_.second.ip_src_addr) &&
                 (this->info_t.proto_id == d_.second.proto_id) &&
@@ -2397,7 +2409,7 @@ PFSummary::printUnique(TSet set_, TMin min_, TMax max_)
         }
 
         std::cout << "Source Address: " << ip_ << "\n";
-        int i_ = 0;
+        [[maybe_unused]] int i_ = 0;
         for (auto& port_ : s_port) {
           std::stringstream line_ = {};
           const int cnt_ = std::count_if(

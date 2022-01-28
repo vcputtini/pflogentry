@@ -419,7 +419,7 @@ public:
   PFLogentry& append(const std::string& raw_log_);
   void clear();
   size_t size() const;
-  // PFLError toXML(const std::string fn_);
+
   PFLError toXML(const std::string&& fn_ = std::string(),
                  const std::string&& d0_ = std::string(),
                  const std::string&& t0_ = std::string(),
