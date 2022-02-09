@@ -126,17 +126,23 @@ PFLogentry::size() const
  * \param s Month name abbreviation
  * \return true|false
  * \code{.cc}
- * bool b = isMonth("Jan 1 2021");
+ * bool b = isMonth("Jan");
  * \endcode
  */
 bool
 PFLogentry::isMonth(const std::string&& s_)
 {
-  if (s_.length() == 3) {
-    std::size_t found = std::string_view{ month_names_ }.find(s_);
-    return (found != std::string::npos) ? true : false;
-  }
-  return false;
+  auto begin_ = std::cbegin(nmonths_);
+  auto end_ = std::cend(nmonths_);
+
+  auto f_ = std::find_if(begin_, end_, [&s_](const char* cptr_) {
+    if (std::strcmp(s_.c_str(), cptr_) == 0) {
+      return true;
+    }
+    return false;
+  });
+
+  return (f_ != end_);
 }
 
 /*!
@@ -148,9 +154,18 @@ PFLogentry::isMonth(const std::string&& s_)
 int
 PFLogentry::monthToNumber(const std::string&& s_) const
 {
-  if (s_.length() == 3) {
-    std::size_t found = std::string_view{ month_names_ }.find(s_);
-    return (found != std::string::npos) ? (found / 3) + 1 : 0;
+  auto begin_ = std::cbegin(nmonths_);
+  auto end_ = std::cend(nmonths_);
+
+  auto f_ = std::find_if(begin_, end_, [&s_](const char* cptr_) {
+    if (std::strcmp(s_.c_str(), cptr_) == 0) {
+      return true;
+    }
+    return false;
+  });
+
+  if (f_ != end_) {
+    return std::distance(begin_, f_) + 1;
   }
   return 0;
 }

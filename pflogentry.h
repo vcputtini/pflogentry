@@ -465,7 +465,9 @@ private:
     "^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2}).([0-"
     "9]{6})(\\S+)$";
 
-  static constexpr char month_names_[] = "JanFebMarAprMayJunJulAugSepOctNovDec";
+  static const constexpr char* nmonths_[] = { "Jan", "Feb", "Mar", "Apr",
+                                              "May", "Jun", "Jul", "Aug",
+                                              "Sep", "Oct", "Nov", "Dec" };
 
   std::vector<std::string> split(const std::string&& s_, const char sep_ = ',');
   inline bool isMonth(const std::string&& s_);
