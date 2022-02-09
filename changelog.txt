@@ -1,15 +1,23 @@
-* fri jan 28 2022 PFlogentry <vcputtini@gmail.com>
- - CMakeLists.txt improvements.
- - Fixed the initialization order of variables in object constructors.
- - Fixed compilation warnings about unused variables
+* Wed Feb 099 2022 PFlogentry <vcputtini@gmail.com>
+- PFLogentry:: 
+  - Changed static constexpr char month_names_[] = "..."
+    by static const constexpr char* nmonths_[] = { "Jan", ..., "Dec"}; 
+  - Changed logic inside functions: inline bool isMonth(const std::string&& s_);
+    and inline int monthToNumber(const std::string&& s_) const, 
+    to use char *nmonths[].
+  
+* Fri Jan 28 2022 PFlogentry <vcputtini@gmail.com>
+- CMakeLists.txt improvements.
+- Fixed the initialization order of variables in object constructors.
+- Fixed compilation warnings about unused variables
 
-* tue jan 26 2022 PFlogentry <vcputtini@gmail.com>
+* Tue Jan 26 2022 PFlogentry <vcputtini@gmail.com>
 - Added checking the validity of the date/time informed by the user
   in the function: 
   PFLogentry::PFLError PFSummary::setDateTime(const std::string&& d0_,
   const std::string&& t0_, const std::string&& d1_, const std::string&& t1_).
 
-* mon jan 25 2022 PFlogentry <vcputtini@gmail.com>
+* Mon Jan 25 2022 PFlogentry <vcputtini@gmail.com>
 - PFLogentry::toXML(const std::string fn_) changed to:
 	PFLogentry::toXML(const std::string&& fn_,
         	          const std::string&& d0_,
@@ -30,14 +38,14 @@ const, now checks if date/time is in valid format.
                 const std::string&& d1_, const std::string&& t1_),
   Added validation on the date and time entered by the user.
 
-* mon jan 21 2022 PFlogentry <vcputtini@gmail.com>
+* Mon Jan 21 2022 PFlogentry <vcputtini@gmail.com>
 - Improvement in details in certain comments.
 - Fixed for correct representation of data types of some variables within
 structures.
 
-* mon dec 20 2021 PFlogentry <vcputtini@gmail.com>
+* Mon Dec 20 2021 PFlogentry <vcputtini@gmail.com>
 - Continuing improve standardization of the use of enumerations.
 
-* thu dec 09 2021 PFlogentry <vcputtini@gmail.com>
+* Thu Dec 09 2021 PFlogentry <vcputtini@gmail.com>
 - Improved standardization of the use of enumerations.
 - Minor cleanups.
