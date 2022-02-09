@@ -4,7 +4,9 @@ project(pflogentry LANGUAGES CXX VERSION 1.0 DESCRIPTION "pfSense Filter Log Ana
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS_RELEASE "-O2 -Wall")
+set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+
+ADD_DEFINITIONS("-Wall")
 
 file(WRITE "${CMAKE_SOURCE_DIR}/QtCreatorDeployment.txt" "<deployment/prefix>\n")
 
