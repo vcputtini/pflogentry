@@ -1,4 +1,4 @@
-* Wed Feb 099 2022 PFlogentry <vcputtini@gmail.com>
+* Wed Feb 09 2022 PFlogentry <vcputtini@gmail.com>
 - PFLogentry:: 
   - Changed static constexpr char month_names_[] = "..."
     by static const constexpr char* nmonths_[] = { "Jan", ..., "Dec"}; 
