@@ -1,11 +1,18 @@
+* Thu Mar 10 2022 PFlogentry <vcputtini@gmail.com>
+- Added DEBUG_PARSER constant in CMakeLists.txt file
+- PFLogentry::
+  - Changed name of funcion from parse() to parser().
+  - parser)(): Improvement in error detection in the regex that parses the
+    log line.
+
 * Wed Feb 09 2022 PFlogentry <vcputtini@gmail.com>
-- PFLogentry:: 
+- PFLogentry::
   - Changed static constexpr char month_names_[] = "..."
-    by static const constexpr char* nmonths_[] = { "Jan", ..., "Dec"}; 
+    by static const constexpr char* nmonths_[] = { "Jan", ..., "Dec"};
   - Changed logic inside functions: inline bool isMonth(const std::string&& s_);
-    and inline int monthToNumber(const std::string&& s_) const, 
+    and inline int monthToNumber(const std::string&& s_) const,
     to use char *nmonths[].
-  
+
 * Fri Jan 28 2022 PFlogentry <vcputtini@gmail.com>
 - CMakeLists.txt improvements.
 - Fixed the initialization order of variables in object constructors.
@@ -13,7 +20,7 @@
 
 * Tue Jan 26 2022 PFlogentry <vcputtini@gmail.com>
 - Added checking the validity of the date/time informed by the user
-  in the function: 
+  in the function:
   PFLogentry::PFLError PFSummary::setDateTime(const std::string&& d0_,
   const std::string&& t0_, const std::string&& d1_, const std::string&& t1_).
 
@@ -31,7 +38,7 @@
   bool PFLogentry::isValidTime(const std::string t_) const
   Basic checking of date and time formats. Date must be in ISO format and time in
   the range of 00:00:00 to 23:59:59. If the time default is 12H, it will also
-  be considered valid. 
+  be considered valid.
 - std::tm PFLogentry::mkTime(const std::string d_, const std::string t_)
 const, now checks if date/time is in valid format.
 - PFQuery& PFQuery::select(const std::string&& d0_, const std::string&& t0_,
