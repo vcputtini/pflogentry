@@ -6,7 +6,16 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
-ADD_DEFINITIONS("-Wall")
+add_definitions("-Wall -Wextra -pedantic")
+
+# These macros make the 'parser' function print the values of the retrieved
+# fields to stdout.
+#
+# Important: Only activate these macros for testing. In production environment
+# they must be disabled.
+
+#add_definitions("-DDEBUG_PARSER")
+
 
 file(WRITE "${CMAKE_SOURCE_DIR}/QtCreatorDeployment.txt" "<deployment/prefix>\n")
 
