@@ -92,7 +92,7 @@ PFLogentry&
 PFLogentry::append(const std::string& raw__log_)
 {
   raw_ = std::move(raw__log_);
-  if (parse() == PFLError::PFL_SUCCESS) {
+  if (parser() == PFLError::PFL_SUCCESS) {
     filter_m.insert({ std::mktime(&log_data.header.tm_time), log_data });
   }
   return *this;
@@ -345,6 +345,15 @@ PFLogentry::setError(PFLError e_)
 
 /*!
  * \internal
+ *
+ * \note The constants below are defined in CMakeLists.txt
+ *
+ * DEBUG_PARSER
+ *
+ */
+
+/*!
+ * \internal
  * \brief Parses the log line to internal format.
  * \details Performs several checks on the log line to ensure that it is
  * valid. \note (1) The basis of this parse logic is based on the script
@@ -353,10 +362,8 @@ PFLogentry::setError(PFLError e_)
  * a new logic from scratch.
  */
 PFLogentry::PFLError
-PFLogentry::parse()
+PFLogentry::parser()
 {
-#define DEBUG_PARSE 0
-
   if (raw_.empty() ||
       (raw_.find("newsyslog") != std::string::npos)) { // ignore empty lines
     setError(PFLError::PFL_SUCCESS);
@@ -365,7 +372,7 @@ PFLogentry::parse()
 
   if (isValidEntry(raw_)) {
 
-#if DEBUG_PARSE
+#ifdef DEBUG_PARSER
     std::cout << raw_ << "\n\n";
 #endif
 
@@ -379,7 +386,7 @@ PFLogentry::parse()
         case LogFormat::LogSyslog:
           std::regex_match(raw_.cbegin(), raw_.cend(), match, re_id_rfc5424_);
       }
-#if DEBUG_PARSE
+#ifdef DEBUG_PARSER
       std::cout << "-0 = " << match[0] << "\n"
                 << "-1 = " << match[1] << "\n"
                 << "-2 = " << match[2] << "\n"
@@ -423,7 +430,7 @@ PFLogentry::parse()
         log_data.hostname = std::move(match[4]);
       }
 
-#if DEBUG_PARSE
+#ifdef DEBUG_PARSER
       std::cout << "---> " << log_data.header.id << "\n";
       std::cout << "---> " << log_data.header.month << "\n";
       std::cout << "---> " << log_data.header.day << "\n";
@@ -443,7 +450,7 @@ PFLogentry::parse()
       if (log_fmt_ == LogFormat::LogBSD) {
         pos = std::string_view{ tmp }.find_first_of(": ");
       }
-#if DEBUG_PARSE
+#ifdef DEBUG_PARSER
       std::cout << "\nPOS " << pos << "\n";
 #endif
       if (pos != std::string::npos) {
@@ -453,14 +460,14 @@ PFLogentry::parse()
           tmp = std::string_view{ tmp }.substr(pos + 1, tmp.length());
         }
 
-#if DEBUG_PARSE
+#ifdef DEBUG_PARSER
         std::cout << "tmp = " << tmp << "\n";
 #endif
         std::vector<std::string> v;
         v = split(tmp.c_str(), ',');
 
-#if DEBUG_PARSE
-        for (int i = 0; i < v.size(); i++) {
+#ifdef DEBUG_PARSER
+        for (size_t i = 0; i < v.size(); i++) {
           std::cout << ">> " << i << ": " << v.at(i) << std::endl;
         }
 #endif
@@ -622,7 +629,7 @@ PFLogentry::parse()
           setError(PFLError::PFL_ERR_PARSE_INVALID_PROTOCOL);
           return PFLError::PFL_ERR_PARSE_INVALID_LINE;
         }
-#if DEBUG_PARSE
+#ifdef DEBUG_PARSER
         std::cout << "tos " << log_data.ipv4_data.tos << "\n"
                   << "ecn " << log_data.ipv4_data.ecn << "\n"
                   << "ttl " << log_data.ipv4_data.ttl << "\n"
@@ -667,6 +674,10 @@ PFLogentry::parse()
 #endif
       } // npos
 
+    } catch (std::regex_error& e_) {
+      std::cout << "Parser PFLogentry regex error = " << e_.what() << "\n";
+      setError(PFLError::PFL_ERR_PARSER_FAILED);
+      return PFLError::PFL_ERR_PARSER_FAILED;
     } catch (const std::exception& e) {
       std::cout << "[" << __LINE__ << "] "
                 << __FILE__ ": An exception occurred: " << e.what() << "\n";

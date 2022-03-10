@@ -345,6 +345,19 @@ struct PFLogentry_EXPORT FilterData
     PFL_ERR_PARSE_INVALID_PROTOCOL,
     PFL_ERR_XML_FILE_NOT_SAVE,
     PFL_ERR_XML_FILE_NAME_INCONSISTENT,
+    PFL_ERR_PARSER_FAILED,
+    PFL_ERR_REGEX_COLLATE,
+    PFL_ERR_REGEX_CTYPE,
+    PFL_ERR_REGEX_ESCAPE,
+    PFL_ERR_REGEX_BACKREF,
+    PFL_ERR_REGEX_BRACK,
+    PFL_ERR_REGEX_PAREN,
+    PFL_ERR_REGEX_BADBRACE,
+    PFL_ERR_REGEX_RANGE,
+    PFL_ERR_REGEX_SPACE,
+    PFL_ERR_REGEX_BADREPEAT,
+    PFL_ERR_REGEX_COMPLEXITY,
+    PFL_ERR_REGEX_STACK,
     PFL_ERR_UNKNOWN
   };
 
@@ -370,6 +383,34 @@ struct PFLogentry_EXPORT FilterData
     { PFLError::PFL_ERR_XML_FILE_NOT_SAVE, "File cannnot be save." },
     { PFLError::PFL_ERR_XML_FILE_NAME_INCONSISTENT,
       "File name is inconsistent." },
+    /*! \note Base on: https://en.cppreference.com/w/cpp/regex/error_type */
+    { PFLError::PFL_ERR_REGEX_COLLATE,
+      "The expression contains an invalid collating element name." },
+    { PFLError::PFL_ERR_REGEX_CTYPE,
+      "The expression contains an invalid character class name." },
+    { PFLError::PFL_ERR_REGEX_ESCAPE,
+      "The expression contains an invalid escaped character or a trailing "
+      "escape." },
+    { PFLError::PFL_ERR_REGEX_BACKREF,
+      "The expression contains an invalid back reference." },
+    { PFLError::PFL_ERR_REGEX_BRACK,
+      "The expression contains mismatched square brackets ('[' and ']')." },
+    { PFLError::PFL_ERR_REGEX_PAREN,
+      "The expression contains mismatched parentheses ('(' and ')')." },
+    { PFLError::PFL_ERR_REGEX_BADBRACE,
+      "The expression contains mismatched curly braces ('{' and '}')." },
+    { PFLError::PFL_ERR_REGEX_RANGE,
+      "The expression contains an invalid character range (e.g. [b-a])." },
+    { PFLError::PFL_ERR_REGEX_SPACE,
+      "There was not enough memory to convert the expression into a finite "
+      "state machine." },
+    { PFLError::PFL_ERR_REGEX_BADREPEAT,
+      "One of *?+{ was not preceded by a valid regular expression." },
+    { PFLError::PFL_ERR_REGEX_COMPLEXITY,
+      "The complexity of an attempted match exceeded a predefined level." },
+    { PFLError::PFL_ERR_REGEX_STACK,
+      "There was not enough memory to perform a match." },
+
     { PFLError::PFL_ERR_UNKNOWN, "Unknown Error." }
   };
 };
@@ -387,6 +428,7 @@ struct overloadedP : Ts...
 {
   using Ts::operator()...;
 };
+
 template<class... Ts>
 overloadedP(Ts...) -> overloadedP<Ts...>;
 struct PFLogentry_EXPORT Visitor
@@ -510,7 +552,7 @@ protected:
 
   void setError(PFLError e_);
 
-  PFLError parse();
+  PFLError parser();
 
   std::tm mkTime(const std::string d_, const std::string t_) const;
 
