@@ -50,12 +50,14 @@ Visitor::TypeVar
 Visitor::varType(var_t t_) const
 {
   TypeVar typ = {};
-  std::visit(
-    overloadedP{ [&typ](int arg) { typ = TypeVar::TInt; },
-                 [&typ](long arg) { typ = TypeVar::TLong; },
-                 [&typ](uint32_t arg) { typ = TypeVar::TUint; },
-                 [&typ](const std::string& arg) { typ = TypeVar::TString; } },
-    t_);
+  std::visit(overloadedP{
+               [&typ]([[maybe_unused]] int arg) { typ = TypeVar::TInt; },
+               [&typ]([[maybe_unused]] long arg) { typ = TypeVar::TLong; },
+               [&typ]([[maybe_unused]] uint32_t arg) { typ = TypeVar::TUint; },
+               [&typ]([[maybe_unused]] const std::string& arg) {
+                 typ = TypeVar::TString;
+               } },
+             t_);
   return typ;
 }
 
@@ -210,9 +212,7 @@ PFLogentry::errorNum() const noexcept
 std::string
 PFLogentry::getErrorText() const
 {
-  std::map<PFLError, const std::string>::const_iterator it_ =
-    mError.find(pflError);
-  if (it_ != mError.end()) {
+  if (auto it_ = mError.find(pflError); it_ != mError.cend()) {
     return it_->second;
   }
   return mError.at(PFLError::PFL_ERR_UNKNOWN);
@@ -548,10 +548,9 @@ PFLogentry::parser()
             log_data.icmp.dst_addr = log_data.ip_dst_addr;
             log_data.icmp.type = std::move(v[++inc]);
 
-            std::map<std::string, ICMPType>::iterator it =
-              icmp_m.find(log_data.icmp.type);
-
-            if (it == icmp_m.end()) { // found
+            if (std::map<std::string, ICMPType>::iterator it =
+                  icmp_m.find(log_data.icmp.type);
+                it == icmp_m.end()) { // found
               switch (it->second) {
                 case ICMPType::Request:
                   [[fallthrough]];
@@ -924,67 +923,48 @@ PFLogentry::percent(Ta lhs_, Tb rhs_) const
 int
 PFLogentry::intFields(Fields f_, const LogData& d_) const
 {
-  int val_ = 0;
   switch (f_) {
     case Fields::HdrMonth:
-      val_ = d_.header.month;
-      break;
+      return d_.header.month;
     case Fields::HdrDay:
-      val_ = d_.header.day;
-      break;
+      return d_.header.day;
     case Fields::IpVersion:
-      val_ = d_.ip_version;
-      break;
+      return d_.ip_version;
     case Fields::Ipv4DataTTL:
-      val_ = d_.ipv4_data.ttl;
-      break;
+      return d_.ipv4_data.ttl;
     case Fields::Ipv4DataPKTID:
-      val_ = d_.ipv4_data.packet_id;
-      break;
+      return d_.ipv4_data.packet_id;
     case Fields::Ipv4DataOFFSET:
-      val_ = d_.ipv4_data.offset;
-      break;
+      return d_.ipv4_data.offset;
     case Fields::Ipv6DataHOPLIM:
-      val_ = d_.ipv6_data.hop_limit;
-      break;
+      return d_.ipv6_data.hop_limit;
     case Fields::ProtoId:
-      val_ = d_.proto_id;
-      break;
+      return d_.proto_id;
     case Fields::Length:
-      val_ = d_.length_data;
-      break;
+      return d_.length_data;
     case Fields::SrcPort:
-      val_ = d_.src_port;
-      break;
+      return d_.src_port;
     case Fields::DstPort:
-      val_ = d_.dst_port;
-      break;
+      return d_.dst_port;
     case Fields::IcmpProtoId:
-      val_ = d_.icmp.id;
-      break;
+      return d_.icmp.id;
     case Fields::IcmpPort:
-      val_ = d_.icmp.port;
-      break;
+      return d_.icmp.port;
     case Fields::IcmpMTU:
-      val_ = d_.icmp.mtu;
-      break;
+      return d_.icmp.mtu;
     case Fields::CarpTTL:
-      val_ = d_.carp.ttl;
-      break;
+      return d_.carp.ttl;
     case Fields::CarpVHID:
-      val_ = d_.carp.vhid;
-      break;
+      return d_.carp.vhid;
     case Fields::CarpVersion:
-      val_ = d_.carp.version;
-      break;
+      return d_.carp.version;
     case Fields::CarpAdvBase:
-      val_ = d_.carp.advbase;
-      break;
+      return d_.carp.advbase;
     case Fields::CarpAdvSkew:
-      val_ = d_.carp.advskew;
-      break;
+      return d_.carp.advskew;
+    default:
+      return 0;
   }
-  return val_;
 }
 
 /*!
@@ -997,36 +977,28 @@ PFLogentry::intFields(Fields f_, const LogData& d_) const
 long
 PFLogentry::longFields(Fields f_, const LogData& d_) const
 {
-  long val_ = 0L;
   switch (f_) {
     case Fields::RuleNumber:
-      val_ = d_.rule_number;
-      break;
+      return d_.rule_number;
     case Fields::SubRuleNumber:
-      val_ = d_.sub_rule_number;
-      break;
+      return d_.sub_rule_number;
     case Fields::Tracker:
-      val_ = d_.tracker;
-      break;
+      return d_.tracker;
     case Fields::IcmpSEQ:
-      val_ = d_.icmp.seq;
-      break;
+      return d_.icmp.seq;
     case Fields::TcpSEQ:
-      val_ = d_.tcp.seq;
-      break;
+      return d_.tcp.seq;
     case Fields::TcpACK:
-      val_ = d_.tcp.ack;
-      break;
+      return d_.tcp.ack;
     case Fields::TcpWIN:
-      val_ = d_.tcp.window;
-      break;
+      return d_.tcp.window;
     case Fields::TcpURG:
-      val_ = d_.tcp.urg;
-      break;
+      return d_.tcp.urg;
     case Fields::DataLen:
-      val_ = d_.data_len;
+      return d_.data_len;
+    default:
+      return 0;
   }
-  return val_;
 }
 
 /*!
@@ -1039,18 +1011,16 @@ PFLogentry::longFields(Fields f_, const LogData& d_) const
 uint32_t
 PFLogentry::uint32Fields(Fields f_, const LogData& d_) const
 {
-  uint32_t val_ = 0;
   switch (f_) {
     case Fields::IcmpOTime:
-      val_ = d_.icmp.otime;
-      break;
+      return d_.icmp.otime;
     case Fields::IcmpRTime:
-      val_ = d_.icmp.rtime;
-      break;
+      return d_.icmp.rtime;
     case Fields::IcmpTTime:
-      val_ = d_.icmp.ttime;
+      return d_.icmp.ttime;
+    default:
+      return 0;
   }
-  return val_;
 }
 
 /*!
@@ -1063,84 +1033,60 @@ PFLogentry::uint32Fields(Fields f_, const LogData& d_) const
 std::string
 PFLogentry::strFields(Fields f_, const LogData& d_) const
 {
-  std::string r = {};
   switch (f_) {
     case Fields::HdrTimeStamp:
-      r = std::string();
-      break;
+      return std::string();
     case Fields::HostName:
-      r = d_.hostname;
-      break;
+      return d_.hostname;
     case Fields::Anchor:
-      r = d_.anchor;
-      break;
+      return d_.anchor;
     case Fields::RealIFace:
-      r = d_.real_iface;
-      break;
+      return d_.real_iface;
     case Fields::Reason:
-      r = d_.reason;
-      break;
+      return d_.reason;
     case Fields::Action:
-      r = d_.action;
-      break;
+      return d_.action;
     case Fields::Direction:
-      r = d_.direction;
-      break;
+      return d_.direction;
     case Fields::Ipv4DataTOS:
-      r = d_.ipv4_data.tos;
-      break;
+      return d_.ipv4_data.tos;
     case Fields::Ipv4DataECN:
-      r = d_.ipv4_data.ecn;
-      break;
+      return d_.ipv4_data.ecn;
     case Fields::Ipv4DataFLAGS:
-      r = d_.ipv4_data.flags;
-      break;
+      return d_.ipv4_data.flags;
     case Fields::Ipv6DataCLASS:
-      r = d_.ipv6_data.class_data;
-      break;
+      return d_.ipv6_data.class_data;
     case Fields::Ipv6DataFLOWLABEL:
-      r = d_.ipv6_data.flow_label;
-      break;
+      return d_.ipv6_data.flow_label;
     case Fields::ProtoText:
-      r = d_.proto_text;
-      break;
+      return d_.proto_text;
     case Fields::IpSrcAddr:
-      r = d_.ip_src_addr;
-      break;
+      return d_.ip_src_addr;
     case Fields::IpDstAddr:
-      r = d_.ip_dst_addr;
-      break;
+      return d_.ip_dst_addr;
     case Fields::TcpFLAGS:
-      r = d_.tcp.flags;
-      break;
+      return d_.tcp.flags;
     case Fields::TcpOPTS:
-      r = d_.tcp.options;
-      break;
+      return d_.tcp.options;
     case Fields::IcmpType:
-      r = d_.icmp.type;
-      break;
+      return d_.icmp.type;
     case Fields::IcmpEchoType:
-      r = d_.icmp.echo_type;
-      break;
+      return d_.icmp.echo_type;
     case Fields::IcmpSrcAddr:
-      r = d_.icmp.src_addr;
-      break;
+      return d_.icmp.src_addr;
     case Fields::IcmpDstAddr:
-      r = d_.icmp.dst_addr;
-      break;
+      return d_.icmp.dst_addr;
     case Fields::IcmpDescr:
-      r = d_.icmp.descr;
-      break;
+      return d_.icmp.descr;
     case Fields::IgmpSrc:
-      r = d_.igmp.src;
-      break;
+      return d_.igmp.src;
     case Fields::IgmpDst:
-      r = d_.igmp.dst;
-      break;
+      return d_.igmp.dst;
     case Fields::CarpType:
-      r = d_.carp.type;
+      return d_.carp.type;
+    default:
+      return std::string();
   }
-  return r;
 }
 
 /* PFCounter ---------------------------------------------------------------
@@ -1300,54 +1246,49 @@ PFCounter::compute(var_t t_, Compare comp_) const
 {
   Visitor::TypeVar typevar = varType(t_);
 
-  size_t result_ = {};
+  size_t&& result_ = {};
 
   auto ibegin_m = filter_m.cbegin();
   auto iend_m = filter_m.cend();
 
   if (typevar == TypeVar::TInt) {
     result_ = std::count_if(
-      ibegin_m, iend_m, [&t_, &comp_, *this](const filter_pair_ d_) {
+      ibegin_m, iend_m, [&t_, &comp_, *this](const filter_pair_& d_) {
         return this->decision(
           intFields(fld, d_.second), std::get<int>(t_), comp_);
       });
   } else if (typevar == TypeVar::TLong) {
     result_ = std::count_if(
-      ibegin_m, iend_m, [&t_, &comp_, *this](const filter_pair_ d_) {
+      ibegin_m, iend_m, [&t_, &comp_, *this](const filter_pair_& d_) {
         return this->decision(
           longFields(fld, d_.second), std::get<long>(t_), comp_);
       });
   } else if (typevar == TypeVar::TUint) {
     result_ = std::count_if(
-      ibegin_m, iend_m, [&t_, &comp_, *this](const filter_pair_ d_) {
+      ibegin_m, iend_m, [&t_, &comp_, *this](const filter_pair_& d_) {
         return this->decision(
           uint32Fields(fld, d_.second), std::get<uint32_t>(t_), comp_);
       });
   } else if (typevar == TypeVar::TString) {
     if (fld == Fields::HdrTimeStamp) {
       result_ = std::count_if(
-        ibegin_m, iend_m, [&t_, &comp_, this](const filter_pair_ d_) {
+        ibegin_m, iend_m, [&t_, &comp_, this](const filter_pair_& d_) {
           switch (comp_) {
             case EQ:
-              if (this->compareDT(d_.second.header.time,
-                                  std::get<std::string>(t_)) == 0)
-                return true;
-              break;
+              return this->compareDT(d_.second.header.time,
+                                     std::get<std::string>(t_)) == 0;
             case LT:
-              if (this->compareDT(d_.second.header.time,
-                                  std::get<std::string>(t_)) == -1)
-                return true;
-              break;
+              return this->compareDT(d_.second.header.time,
+                                     std::get<std::string>(t_)) == -1;
             case GT:
-              if (this->compareDT(d_.second.header.time,
-                                  std::get<std::string>(t_)) == 1)
-                return true;
+              return this->compareDT(d_.second.header.time,
+                                     std::get<std::string>(t_)) == 1;
           }
           return false;
         });
     } else {
       result_ = std::count_if(
-        ibegin_m, iend_m, [&t_, &comp_, this](const filter_pair_ d_) {
+        ibegin_m, iend_m, [&t_, &comp_, this](const filter_pair_& d_) {
           return this->decision(
             strFields(fld, d_.second), std::get<std::string>(t_), comp_);
         });
@@ -1373,14 +1314,14 @@ PFCounter::compute(var_t t_min, var_t t_max, Compare comp_) const
   Visitor::TypeVar tmin = varType(t_min);
   [[maybe_unused]] Visitor::TypeVar tmax = varType(t_max);
 
-  size_t result_ = {};
+  size_t&& result_ = {};
 
   auto ibegin_m = filter_m.cbegin();
   auto iend_m = filter_m.cend();
 
   if (tmin == TypeVar::TInt) {
     result_ = std::count_if(
-      ibegin_m, iend_m, [&t_min, &t_max, &comp_, this](const filter_pair_ d_) {
+      ibegin_m, iend_m, [&t_min, &t_max, &comp_, this](const filter_pair_& d_) {
         return this->decision(intFields(fld, d_.second),
                               std::get<int>(t_min),
                               std::get<int>(t_max),
@@ -1388,7 +1329,7 @@ PFCounter::compute(var_t t_min, var_t t_max, Compare comp_) const
       });
   } else if (tmin == TypeVar::TLong) {
     result_ = std::count_if(
-      ibegin_m, iend_m, [&t_min, &t_max, &comp_, this](const filter_pair_ d_) {
+      ibegin_m, iend_m, [&t_min, &t_max, &comp_, this](const filter_pair_& d_) {
         return this->decision(longFields(fld, d_.second),
                               std::get<long>(t_min),
                               std::get<long>(t_max),
@@ -1396,7 +1337,7 @@ PFCounter::compute(var_t t_min, var_t t_max, Compare comp_) const
       });
   } else if (tmin == TypeVar::TUint) {
     result_ = std::count_if(
-      ibegin_m, iend_m, [&t_min, &t_max, &comp_, this](const filter_pair_ d_) {
+      ibegin_m, iend_m, [&t_min, &t_max, &comp_, this](const filter_pair_& d_) {
         return this->decision(uint32Fields(fld, d_.second),
                               std::get<uint32_t>(t_min),
                               std::get<uint32_t>(t_max),
@@ -1407,7 +1348,7 @@ PFCounter::compute(var_t t_min, var_t t_max, Compare comp_) const
       result_ =
         std::count_if(ibegin_m,
                       iend_m,
-                      [&t_min, &t_max, &comp_, this](const filter_pair_ d_) {
+                      [&t_min, &t_max, &comp_, this](const filter_pair_& d_) {
                         return this->compareDT1(d_.second.header.time,
                                                 std::get<std::string>(t_min),
                                                 std::get<std::string>(t_max),
@@ -1690,26 +1631,26 @@ PFQuery::exists(Fields fld_, Compare comp_, Visitor::var_t&& t_)
 
   if (typevar == TypeVar::TInt) {
     result_ = std::find_if(
-      ibegin_m, iend_m, [&fld_, &comp_, &t_, *this](const filter_pair_ d_) {
+      ibegin_m, iend_m, [&fld_, &comp_, &t_, *this](const filter_pair_& d_) {
         return this->decision(
           intFields(fld_, d_.second), std::get<int>(t_), comp_);
       });
   } else if (typevar == TypeVar::TLong) {
     result_ = std::find_if(
-      ibegin_m, iend_m, [&fld_, &comp_, &t_, *this](const filter_pair_ d_) {
+      ibegin_m, iend_m, [&fld_, &comp_, &t_, *this](const filter_pair_& d_) {
         return this->decision(
           longFields(fld_, d_.second), std::get<long>(t_), comp_);
       });
   } else if (typevar == TypeVar::TUint) {
     result_ = std::find_if(
-      ibegin_m, iend_m, [&fld_, &comp_, &t_, *this](const filter_pair_ d_) {
+      ibegin_m, iend_m, [&fld_, &comp_, &t_, *this](const filter_pair_& d_) {
         return this->decision(
           uint32Fields(fld_, d_.second), std::get<uint32_t>(t_), comp_);
       });
   } else if (typevar == TypeVar::TString) {
     if (fld_ == Fields::HdrTimeStamp) {
       result_ = std::find_if(
-        ibegin_m, iend_m, [&comp_, &t_, *this](const filter_pair_ d_) {
+        ibegin_m, iend_m, [&comp_, &t_, *this](const filter_pair_& d_) {
           switch (comp_) {
             case EQ:
               if (this->compareDT(d_.second.header.time,
@@ -1730,7 +1671,7 @@ PFQuery::exists(Fields fld_, Compare comp_, Visitor::var_t&& t_)
         });
     } else {
       result_ = std::find_if(
-        ibegin_m, iend_m, [&fld_, &comp_, &t_, *this](const filter_pair_ d_) {
+        ibegin_m, iend_m, [&fld_, &comp_, &t_, *this](const filter_pair_& d_) {
           return this->decision(
             strFields(fld_, d_.second), std::get<std::string>(t_), comp_);
         });
@@ -1832,7 +1773,7 @@ PFSummary::setIfName(const std::string&& ifname_)
 void
 PFSummary::setLinesPage(const int lp_)
 {
-  lines_per_page_ = lp_ - lines_header;
+  lines_per_page_ = (lp_ - lines_header);
 }
 
 /*!
@@ -2033,13 +1974,13 @@ PFSummary::printTabReasonByAction(ProtoID id_, IPVersion ipver_)
 
   std::cout << std::setw(10) << std::left << std::setfill('_') << "Match"
             << std::setfill(' ');
-  for (int j = 0; j <= 3; j++) {
+  for (int j = 0; j <= 3; ++j) {
     std::cout << std::setw(10) << std::right << mat_in_[0][j];
   }
   std::cout << "\n";
   std::cout << std::setw(10) << std::left << std::setfill('_') << "Other"
             << std::setfill(' ');
-  for (int j = 0; j <= 3; j++) {
+  for (int j = 0; j <= 3; ++j) {
     std::cout << std::setw(10) << std::right << mat_in_[1][j];
   }
 
@@ -2057,13 +1998,13 @@ PFSummary::printTabReasonByAction(ProtoID id_, IPVersion ipver_)
 
   std::cout << std::setw(10) << std::left << std::setfill('_') << "Match"
             << std::setfill(' ');
-  for (int j = 0; j <= 3; j++) {
+  for (int j = 0; j <= 3; ++j) {
     std::cout << std::setw(10) << std::right << mat_out_[0][j];
   }
   std::cout << "\n";
   std::cout << std::setw(10) << std::left << std::setfill('_') << "Other"
             << std::setfill(' ');
-  for (int j = 0; j <= 3; j++) {
+  for (int j = 0; j <= 3; ++j) {
     std::cout << std::setw(10) << std::right << mat_out_[1][j];
   }
 
@@ -2363,7 +2304,7 @@ PFSummary::printUnique(TSet set_, TMin min_, TMax max_)
         int cntIn_ = 0;
         int cntOut_ = 0;
         [[maybe_unused]] const int i = std::count_if(
-          min_, max_, [&ip_, &cntIn_, &cntOut_, this](const filter_pair_ d_) {
+          min_, max_, [&ip_, &cntIn_, &cntOut_, this](const filter_pair_& d_) {
             if ((ip_ == d_.second.ip_src_addr) &&
                 (this->info_t.proto_id == d_.second.proto_id) &&
                 (this->info_t.ip_version ==
@@ -2439,7 +2380,7 @@ PFSummary::printUnique(TSet set_, TMin min_, TMax max_)
         for (auto& port_ : s_port) {
           std::stringstream line_ = {};
           const int cnt_ = std::count_if(
-            min_, max_, [&ip_, &port_, &line_](const filter_pair_ d_) {
+            min_, max_, [&ip_, &port_, &line_](const filter_pair_& d_) {
               if (ip_ == d_.second.ip_src_addr && port_ == d_.second.src_port) {
                 line_ << "\n\t\tDir: [" << d_.second.direction << "] ";
                 line_ << (d_.second.ip_version == 6
@@ -2616,8 +2557,9 @@ PFRawToXML::dateTime() const
  * \param fn_ File name
  * \return PFLError
  * \return Normalized file name by reference name with .xml extension.
- * \note Basically for a name to be considered inconsistent, it must have more
- * than one dot '.' in its formation.
+ * \note 1. Basically for a name to be considered inconsistent, it must have
+ * more than one dot '.' in its formation.
+ * \note 2. If there're spaces in the filename they will be replaced by '_'.
  */
 PFLogentry::PFLError
 PFRawToXML::normFn(std::string& fn_)
@@ -2626,26 +2568,25 @@ PFRawToXML::normFn(std::string& fn_)
   int c = 0;
   for (auto& a : fn_) {
     if (a == '.') {
-      c++;
+      ++c;
     }
   }
 
   if (c <= 1) {
-    std::transform(fn_s.begin(), fn_s.end(), fn_s.begin(), ::tolower);
-    size_t pos_t = std::string_view{ fn_s }.find(".xml");
-    if (pos_t == std::string::npos) {
-      if ((pos_t = std::string_view{ fn_s }.rfind(".")) != std::string::npos) {
-        fn_.substr(pos_t, fn_.length());
-        fn_.replace(pos_t, fn_.length(), ".xml");
-      } else {
-        fn_ += ".xml";
+    std::replace(fn_.begin(), fn_.end(), ' ', '_');
+    std::transform(fn_.cbegin(), fn_.cend(), fn_.begin(), ::tolower);
+    if (size_t f = std::string_view{ fn_ }.rfind("."); f != std::string::npos) {
+      if (std::string s_ = fn_.substr(f + 1, fn_.size()); s_ != "xml") {
+        fn_.replace(f + 1, fn_.size(), "xml");
       }
+      return PFLError::PFL_SUCCESS;
+    } else {
+      fn_ += ".xml";
+      return PFLError::PFL_SUCCESS;
     }
-    pflError = PFLError::PFL_SUCCESS;
-  } else {
-    pflError = PFLError::PFL_ERR_XML_FILE_NAME_INCONSISTENT;
   }
-  return pflError;
+
+  return PFLError::PFL_ERR_XML_FILE_NAME_INCONSISTENT;
 };
 
 /*!

@@ -1,3 +1,6 @@
+* Tue Mar 15 2022 PFlogentry <vcputtini@gmail.com>
+- Fixes and minor improvements.
+
 * Thu Mar 10 2022 PFlogentry <vcputtini@gmail.com>
 - Added DEBUG_PARSER constant in CMakeLists.txt file
 - PFLogentry::

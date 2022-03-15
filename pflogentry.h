@@ -511,7 +511,8 @@ private:
                                               "May", "Jun", "Jul", "Aug",
                                               "Sep", "Oct", "Nov", "Dec" };
 
-  std::vector<std::string> split(const std::string&& s_, const char sep_ = ',');
+  std::vector<std::string> split(const std::string&& s_,
+                                       const char sep_ = ',');
   inline bool isMonth(const std::string&& s_);
   inline int monthToNumber(const std::string&& s_) const;
   inline bool isValidEntry(const std::string s_);
