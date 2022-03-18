@@ -329,7 +329,7 @@ PFLogentry::toLong(const std::string&& s_) const
       aux += std::move(a);
     }
   }
-  return std::stol(std::move(aux));
+  return std::stol(aux);
 }
 
 /*!
@@ -866,12 +866,17 @@ PFLogentry::decision(TVarD&& data_,
                      TMax&& max_,
                      TCompare&& cmp_) const
 {
-  if (cmp_ == Compare::BTWAND) {
-    return ((data_ >= min_) && (data_ <= max_));
-  } else if (cmp_ == Compare::BTWOR) {
-    return ((data_ >= min_) || (data_ <= max_));
+  switch (cmp_) {
+    case Compare::BTWAND: {
+      return ((data_ >= min_) && (data_ <= max_));
+    }
+    case Compare::BTWOR: {
+      return ((data_ >= min_) || (data_ <= max_));
+    }
+    default: {
+      return false;
+    }
   }
-  return false;
 };
 
 /*!
@@ -887,20 +892,29 @@ template<typename TVarS, typename TVarD, typename TCompare>
 bool
 PFLogentry::decision(TVarS&& lhs_, TVarD&& rhs_, TCompare&& cmp_) const
 {
-  if (cmp_ == Compare::EQ) {
-    return lhs_ == rhs_;
-  } else if (cmp_ == Compare::LT) {
-    return lhs_ < rhs_;
-  } else if (cmp_ == Compare::GT) {
-    return lhs_ > rhs_;
-  } else if (cmp_ == Compare::LE) {
-    return lhs_ <= rhs_;
-  } else if (cmp_ == Compare::GE) {
-    return lhs_ >= rhs_;
-  } else if (cmp_ == Compare::NE) {
-    return lhs_ != rhs_;
+  switch (cmp_) {
+    case Compare::EQ: {
+      return lhs_ == rhs_;
+    }
+    case Compare::LT: {
+      return lhs_ < rhs_;
+    }
+    case Compare::GT: {
+      return lhs_ > rhs_;
+    }
+    case Compare::LE: {
+      return lhs_ <= rhs_;
+    }
+    case Compare::GE: {
+      return lhs_ >= rhs_;
+    }
+    case Compare::NE: {
+      return lhs_ != rhs_;
+    }
+    default: {
+      return false;
+    }
   }
-  return false;
 };
 
 /*!
@@ -920,7 +934,7 @@ PFLogentry::percent(Ta lhs_, Tb rhs_) const
  * \param d_ Data
  * \return int
  */
-int
+constexpr int
 PFLogentry::intFields(Fields f_, const LogData& d_) const
 {
   switch (f_) {
@@ -974,7 +988,7 @@ PFLogentry::intFields(Fields f_, const LogData& d_) const
  * \param d_ Data
  * \return long
  */
-long
+constexpr long
 PFLogentry::longFields(Fields f_, const LogData& d_) const
 {
   switch (f_) {
@@ -1008,7 +1022,7 @@ PFLogentry::longFields(Fields f_, const LogData& d_) const
  * \param d_ Data
  * \return uint32_t
  */
-uint32_t
+constexpr uint32_t
 PFLogentry::uint32Fields(Fields f_, const LogData& d_) const
 {
   switch (f_) {
@@ -1246,55 +1260,60 @@ PFCounter::compute(var_t t_, Compare comp_) const
 {
   Visitor::TypeVar typevar = varType(t_);
 
-  size_t&& result_ = {};
-
   auto ibegin_m = filter_m.cbegin();
   auto iend_m = filter_m.cend();
 
-  if (typevar == TypeVar::TInt) {
-    result_ = std::count_if(
-      ibegin_m, iend_m, [&t_, &comp_, *this](const filter_pair_& d_) {
-        return this->decision(
-          intFields(fld, d_.second), std::get<int>(t_), comp_);
-      });
-  } else if (typevar == TypeVar::TLong) {
-    result_ = std::count_if(
-      ibegin_m, iend_m, [&t_, &comp_, *this](const filter_pair_& d_) {
-        return this->decision(
-          longFields(fld, d_.second), std::get<long>(t_), comp_);
-      });
-  } else if (typevar == TypeVar::TUint) {
-    result_ = std::count_if(
-      ibegin_m, iend_m, [&t_, &comp_, *this](const filter_pair_& d_) {
-        return this->decision(
-          uint32Fields(fld, d_.second), std::get<uint32_t>(t_), comp_);
-      });
-  } else if (typevar == TypeVar::TString) {
-    if (fld == Fields::HdrTimeStamp) {
-      result_ = std::count_if(
-        ibegin_m, iend_m, [&t_, &comp_, this](const filter_pair_& d_) {
-          switch (comp_) {
-            case EQ:
-              return this->compareDT(d_.second.header.time,
-                                     std::get<std::string>(t_)) == 0;
-            case LT:
-              return this->compareDT(d_.second.header.time,
-                                     std::get<std::string>(t_)) == -1;
-            case GT:
-              return this->compareDT(d_.second.header.time,
-                                     std::get<std::string>(t_)) == 1;
-          }
-          return false;
-        });
-    } else {
-      result_ = std::count_if(
-        ibegin_m, iend_m, [&t_, &comp_, this](const filter_pair_& d_) {
+  switch (typevar) {
+    case TypeVar::TInt: {
+      return std::count_if(
+        ibegin_m, iend_m, [&t_, &comp_, *this](const filter_pair_& d_) {
           return this->decision(
-            strFields(fld, d_.second), std::get<std::string>(t_), comp_);
+            intFields(fld, d_.second), std::get<int>(t_), comp_);
         });
     }
+    case TypeVar::TLong: {
+      return std::count_if(
+        ibegin_m, iend_m, [&t_, &comp_, *this](const filter_pair_& d_) {
+          return this->decision(
+            longFields(fld, d_.second), std::get<long>(t_), comp_);
+        });
+    }
+    case TypeVar::TUint: {
+      return std::count_if(
+        ibegin_m, iend_m, [&t_, &comp_, *this](const filter_pair_& d_) {
+          return this->decision(
+            uint32Fields(fld, d_.second), std::get<uint32_t>(t_), comp_);
+        });
+    }
+    case TypeVar::TString: {
+      if (fld == Fields::HdrTimeStamp) {
+        return std::count_if(
+          ibegin_m, iend_m, [&t_, &comp_, this](const filter_pair_& d_) {
+            switch (comp_) {
+              case EQ:
+                return this->compareDT(d_.second.header.time,
+                                       std::get<std::string>(t_)) == 0;
+              case LT:
+                return this->compareDT(d_.second.header.time,
+                                       std::get<std::string>(t_)) == -1;
+              case GT:
+                return this->compareDT(d_.second.header.time,
+                                       std::get<std::string>(t_)) == 1;
+            }
+            return false;
+          });
+      } else {
+        return std::count_if(
+          ibegin_m, iend_m, [&t_, &comp_, this](const filter_pair_& d_) {
+            return this->decision(
+              strFields(fld, d_.second), std::get<std::string>(t_), comp_);
+          });
+      }
+    }
+    default: {
+      return 0;
+    }
   }
-  return result_;
 }
 
 /*!
@@ -1314,53 +1333,64 @@ PFCounter::compute(var_t t_min, var_t t_max, Compare comp_) const
   Visitor::TypeVar tmin = varType(t_min);
   [[maybe_unused]] Visitor::TypeVar tmax = varType(t_max);
 
-  size_t&& result_ = {};
-
   auto ibegin_m = filter_m.cbegin();
   auto iend_m = filter_m.cend();
 
-  if (tmin == TypeVar::TInt) {
-    result_ = std::count_if(
-      ibegin_m, iend_m, [&t_min, &t_max, &comp_, this](const filter_pair_& d_) {
-        return this->decision(intFields(fld, d_.second),
-                              std::get<int>(t_min),
-                              std::get<int>(t_max),
-                              comp_);
-      });
-  } else if (tmin == TypeVar::TLong) {
-    result_ = std::count_if(
-      ibegin_m, iend_m, [&t_min, &t_max, &comp_, this](const filter_pair_& d_) {
-        return this->decision(longFields(fld, d_.second),
-                              std::get<long>(t_min),
-                              std::get<long>(t_max),
-                              comp_);
-      });
-  } else if (tmin == TypeVar::TUint) {
-    result_ = std::count_if(
-      ibegin_m, iend_m, [&t_min, &t_max, &comp_, this](const filter_pair_& d_) {
-        return this->decision(uint32Fields(fld, d_.second),
-                              std::get<uint32_t>(t_min),
-                              std::get<uint32_t>(t_max),
-                              comp_);
-      });
-  } else if (tmin == TypeVar::TString) {
-    if (fld == Fields::HdrTimeStamp) {
-      result_ =
-        std::count_if(ibegin_m,
-                      iend_m,
-                      [&t_min, &t_max, &comp_, this](const filter_pair_& d_) {
-                        return this->compareDT1(d_.second.header.time,
-                                                std::get<std::string>(t_min),
-                                                std::get<std::string>(t_max),
-                                                comp_);
-                      });
+  switch (tmin) {
+    case TypeVar::TInt: {
+      return std::count_if(
+        ibegin_m,
+        iend_m,
+        [&t_min, &t_max, &comp_, this](const filter_pair_& d_) {
+          return this->decision(intFields(fld, d_.second),
+                                std::get<int>(t_min),
+                                std::get<int>(t_max),
+                                comp_);
+        });
+    }
+    case TypeVar::TLong: {
+      return std::count_if(
+        ibegin_m,
+        iend_m,
+        [&t_min, &t_max, &comp_, this](const filter_pair_& d_) {
+          return this->decision(longFields(fld, d_.second),
+                                std::get<long>(t_min),
+                                std::get<long>(t_max),
+                                comp_);
+        });
+    }
+    case TypeVar::TUint: {
+      return std::count_if(
+        ibegin_m,
+        iend_m,
+        [&t_min, &t_max, &comp_, this](const filter_pair_& d_) {
+          return this->decision(uint32Fields(fld, d_.second),
+                                std::get<uint32_t>(t_min),
+                                std::get<uint32_t>(t_max),
+                                comp_);
+        });
+    }
+    case TypeVar::TString: {
+      if (fld == Fields::HdrTimeStamp) {
+        return std::count_if(
+          ibegin_m,
+          iend_m,
+          [&t_min, &t_max, &comp_, this](const filter_pair_& d_) {
+            return this->compareDT1(d_.second.header.time,
+                                    std::get<std::string>(t_min),
+                                    std::get<std::string>(t_max),
+                                    comp_);
+          });
+      }
+      default: {
+        return 0;
+      }
     }
   }
-
-  return result_;
 }
 
-/* PFQuery -----------------------------------------------------------------
+/* PFQuery
+ * -----------------------------------------------------------------
  */
 /*!
  * \brief Constructs a PFQuery object (default).
@@ -1578,8 +1608,8 @@ PFQuery::getUint(size_t idx_, Fields fld_) const
  * \brief Returns the text contained in the string type field.
  * \param idx_ Index for accessing data in the vector.
  * \param fld_ Field Id
- * \return field value or constant PFLogentry::invalidText in case of error.
- * \note
+ * \return field value or constant PFLogentry::invalidText in case of
+ * error. \note
  */
 std::string
 PFQuery::getText(size_t idx_, Fields fld_) const
@@ -1612,10 +1642,8 @@ PFQuery::clear()
 }
 
 /*!
- * \brief  Returns true if the query specified by Field-type exists; otherwise
- * returns false.
- * \param fld_ Field id.
- * \param comp_ Compara Id.
+ * \brief  Returns true if the query specified by Field-type exists;
+ * otherwise returns false. \param fld_ Field id. \param comp_ Compara Id.
  * \param t_ Value to compare.
  * \return true | false
  */
@@ -1629,59 +1657,71 @@ PFQuery::exists(Fields fld_, Compare comp_, Visitor::var_t&& t_)
 
   auto result_ = iend_m;
 
-  if (typevar == TypeVar::TInt) {
-    result_ = std::find_if(
-      ibegin_m, iend_m, [&fld_, &comp_, &t_, *this](const filter_pair_& d_) {
-        return this->decision(
-          intFields(fld_, d_.second), std::get<int>(t_), comp_);
-      });
-  } else if (typevar == TypeVar::TLong) {
-    result_ = std::find_if(
-      ibegin_m, iend_m, [&fld_, &comp_, &t_, *this](const filter_pair_& d_) {
-        return this->decision(
-          longFields(fld_, d_.second), std::get<long>(t_), comp_);
-      });
-  } else if (typevar == TypeVar::TUint) {
-    result_ = std::find_if(
-      ibegin_m, iend_m, [&fld_, &comp_, &t_, *this](const filter_pair_& d_) {
-        return this->decision(
-          uint32Fields(fld_, d_.second), std::get<uint32_t>(t_), comp_);
-      });
-  } else if (typevar == TypeVar::TString) {
-    if (fld_ == Fields::HdrTimeStamp) {
-      result_ = std::find_if(
-        ibegin_m, iend_m, [&comp_, &t_, *this](const filter_pair_& d_) {
-          switch (comp_) {
-            case EQ:
-              if (this->compareDT(d_.second.header.time,
-                                  std::get<std::string>(t_)) == 0)
-                return true;
-              break;
-            case LT:
-              if (this->compareDT(d_.second.header.time,
-                                  std::get<std::string>(t_)) == -1)
-                return true;
-              break;
-            case GT:
-              if (this->compareDT(d_.second.header.time,
-                                  std::get<std::string>(t_)) == 1)
-                return true;
-          }
-          return false;
-        });
-    } else {
+  switch (typevar) {
+    case TypeVar::TInt: {
       result_ = std::find_if(
         ibegin_m, iend_m, [&fld_, &comp_, &t_, *this](const filter_pair_& d_) {
           return this->decision(
-            strFields(fld_, d_.second), std::get<std::string>(t_), comp_);
+            intFields(fld_, d_.second), std::get<int>(t_), comp_);
         });
+    }
+    case TypeVar::TLong: {
+      result_ = std::find_if(
+        ibegin_m, iend_m, [&fld_, &comp_, &t_, *this](const filter_pair_& d_) {
+          return this->decision(
+            longFields(fld_, d_.second), std::get<long>(t_), comp_);
+        });
+    }
+    case TypeVar::TUint: {
+      result_ = std::find_if(
+        ibegin_m, iend_m, [&fld_, &comp_, &t_, *this](const filter_pair_& d_) {
+          return this->decision(
+            uint32Fields(fld_, d_.second), std::get<uint32_t>(t_), comp_);
+        });
+    }
+    case TypeVar::TString: {
+      if (fld_ == Fields::HdrTimeStamp) {
+        result_ = std::find_if(
+          ibegin_m, iend_m, [&comp_, &t_, *this](const filter_pair_& d_) {
+            switch (comp_) {
+              case EQ:
+                if (this->compareDT(d_.second.header.time,
+                                    std::get<std::string>(t_)) == 0)
+                  return true;
+                break;
+              case LT:
+                if (this->compareDT(d_.second.header.time,
+                                    std::get<std::string>(t_)) == -1)
+                  return true;
+                break;
+              case GT:
+                if (this->compareDT(d_.second.header.time,
+                                    std::get<std::string>(t_)) == 1)
+                  return true;
+            }
+            return false;
+          });
+      } else {
+        result_ =
+          std::find_if(ibegin_m,
+                       iend_m,
+                       [&fld_, &comp_, &t_, *this](const filter_pair_& d_) {
+                         return this->decision(strFields(fld_, d_.second),
+                                               std::get<std::string>(t_),
+                                               comp_);
+                       });
+      }
+    }
+    default: {
+      return false;
     }
   }
 
   return (result_ != iend_m) ? true : false;
 };
 
-/* PFSummary ---------------------------------------------------------------
+/* PFSummary
+ * ---------------------------------------------------------------
  */
 /*!
  * \brief PFSummary::PFSummary
@@ -1756,8 +1796,9 @@ PFSummary::setHostName(const std::string&& hn_)
 }
 
 /*!
- * \brief If you enter the real interface name, operations will only be done
- * for this particular interface. \param ifname_ (String) Interface name.
+ * \brief If you enter the real interface name, operations will only be
+ * done for this particular interface. \param ifname_ (String) Interface
+ * name.
  */
 void
 PFSummary::setIfName(const std::string&& ifname_)
@@ -2188,8 +2229,8 @@ PFSummary::reportHeader()
 
 /*!
  * \internal
- * \brief Helper function to print the correct header for the chosen report
- * type.
+ * \brief Helper function to print the correct header for the chosen
+ * report type.
  */
 void
 PFSummary::reportHdrDetails()
@@ -2297,10 +2338,10 @@ PFSummary::printUnique(TSet set_, TMin min_, TMax max_)
       std::cout << "Total: [" << std::right << std::setw(10)
                 << std::setfill(' ') << uniq_ip_src.size() << "]\n";
       std::cout << "Source                                  In         Out\n";
-      std::cout
-        << "--------------------------------------- ---------- ----------\n";
+      std::cout << "--------------------------------------- ---------- "
+                   "----------\n";
 
-      for (auto& ip_ : set_) {
+      for (const auto& ip_ : set_) {
         int cntIn_ = 0;
         int cntOut_ = 0;
         [[maybe_unused]] const int i = std::count_if(
@@ -2353,7 +2394,7 @@ PFSummary::printUnique(TSet set_, TMin min_, TMax max_)
     case UniqueType::Details: {
       // get unique source ports by ip
       std::set<int> s_port = {};
-      for (auto& ip_ : set_) {
+      for (const auto& ip_ : set_) {
         for (auto it_ = min_; it_ != max_; ++it_) {
           if ((ip_ == it_->second.ip_src_addr) &&
               (info_t.proto_id == it_->second.proto_id) &&
@@ -2377,7 +2418,7 @@ PFSummary::printUnique(TSet set_, TMin min_, TMax max_)
 
         std::cout << "Source Address: " << ip_ << "\n";
         [[maybe_unused]] int i_ = 0;
-        for (auto& port_ : s_port) {
+        for (const auto& port_ : s_port) {
           std::stringstream line_ = {};
           const int cnt_ = std::count_if(
             min_, max_, [&ip_, &port_, &line_](const filter_pair_& d_) {
@@ -2557,9 +2598,9 @@ PFRawToXML::dateTime() const
  * \param fn_ File name
  * \return PFLError
  * \return Normalized file name by reference name with .xml extension.
- * \note 1. Basically for a name to be considered inconsistent, it must have
- * more than one dot '.' in its formation.
- * \note 2. If there're spaces in the filename they will be replaced by '_'.
+ * \note 1. Basically for a name to be considered inconsistent, it must
+ * have more than one dot '.' in its formation. \note 2. If there're
+ * spaces in the filename they will be replaced by '_'.
  */
 PFLogentry::PFLError
 PFRawToXML::normFn(std::string& fn_)
