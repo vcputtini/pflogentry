@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (c) 2021                                                      *
+ * Copyright (c) 2021-22                                                   *
  *      Volnei Cervi Puttini.  All rights reserved.                        *
  *      vcputtini@gmail.com
  *                                                                         *
@@ -230,7 +230,7 @@ struct PFLogentry_EXPORT FilterData
     ProtoCARP = 112, //!< CARP
   };
 
-  enum ICMPType
+  enum class ICMPType
   {
     Request = 0x00,
     Reply,
@@ -246,19 +246,19 @@ struct PFLogentry_EXPORT FilterData
     TStampReply
   };
 
-  std::map<const std::string, ICMPType> icmp_m = {
-    { "request", Request },
-    { "reply", Reply },
-    { "unreachproto", UnReachProto },
-    { "unreachPort", UnReachPort },
-    { "unreach", UnReach },
-    { "timexceed", TimeExceed },
-    { "paramprob", ParamProb },
-    { "redirect", Redirect },
-    { "maskreply", MaskReply },
-    { "needfrag", NeedFrag },
-    { "tstamp", TStamp },
-    { "tstampreply", TStampReply }
+  const std::map<const std::string_view, ICMPType> icmp_m = {
+    { "request", ICMPType::Request },
+    { "reply", ICMPType::Reply },
+    { "unreachproto", ICMPType::UnReachProto },
+    { "unreachPort", ICMPType::UnReachPort },
+    { "unreach", ICMPType::UnReach },
+    { "timexceed", ICMPType::TimeExceed },
+    { "paramprob", ICMPType::ParamProb },
+    { "redirect", ICMPType::Redirect },
+    { "maskreply", ICMPType::MaskReply },
+    { "needfrag", ICMPType::NeedFrag },
+    { "tstamp", ICMPType::TStamp },
+    { "tstampreply", ICMPType::TStampReply }
   };
 
   /*!
@@ -364,7 +364,7 @@ struct PFLogentry_EXPORT FilterData
   /*!
    * \internal
    */
-  std::map<PFLError, const std::string> mError = {
+  const std::unordered_map<PFLError, const std::string_view> mError = {
     { PFLError::PFL_SUCCESS, "Success!" },
     { PFLError::PFL_ERR_ARG1_GT_ARG2, "Arg1_ > Arg2_" },
     { PFLError::PFL_ERR_INCOMPLETE_NUM_ARGS,

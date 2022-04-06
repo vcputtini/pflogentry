@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (c) 2021                                                      *
+ * Copyright (c) 2021-22                                                   *
  *      Volnei Cervi Puttini.  All rights reserved.                        *
  *      vcputtini@gmail.com
  *                                                                         *
@@ -66,10 +66,10 @@ Visitor::varType(var_t t_) const
  * \brief Constructs a PFLogentry object. (default)
  */
 PFLogentry::PFLogentry(LogFormat fmt_, const int year_)
-  : re_id_rfc3164_(cp_id_rfc3164_)
-  , re_id_rfc5424_(cp_id_rfc5424_)
-  , re_time_rfc3164_(cp_time_rfc3164_)
-  , re_time_rfc5424_(cp_time_rfc5424_)
+  : re_id_rfc3164_(cp_id_rfc3164_, std::regex::optimize)
+  , re_id_rfc5424_(cp_id_rfc5424_, std::regex::optimize)
+  , re_time_rfc3164_(cp_time_rfc3164_, std::regex::optimize)
+  , re_time_rfc5424_(cp_time_rfc5424_, std::regex::optimize)
   , pflError(PFLError::PFL_SUCCESS)
 {
   if (fmt_ == LogFormat::LogBSD) {
@@ -213,9 +213,9 @@ std::string
 PFLogentry::getErrorText() const
 {
   if (auto it_ = mError.find(pflError); it_ != mError.cend()) {
-    return it_->second;
+    return it_->second.data();
   }
-  return mError.at(PFLError::PFL_ERR_UNKNOWN);
+  return mError.at(PFLError::PFL_ERR_UNKNOWN).data();
 }
 
 /*!
@@ -281,8 +281,7 @@ PFLogentry::toXML(const std::string&& fn_,
       tm_end = mkTime(d1_, t1_);
       auto lower_ = filter_m.lower_bound(std::move(std::mktime(&tm_begin)));
       auto upper_ = filter_m.upper_bound(std::move(std::mktime(&tm_end)));
-      std::multimap<int, LogData>::iterator it_;
-      for (it_ = lower_; it_ != upper_; ++it_) {
+      for (auto& it_ = lower_; it_ != upper_; ++it_) {
         if (!it_->second.hostname.empty()) {
           xml.append(it_->second);
         }
@@ -548,7 +547,7 @@ PFLogentry::parser()
             log_data.icmp.dst_addr = log_data.ip_dst_addr;
             log_data.icmp.type = std::move(v[++inc]);
 
-            if (std::map<std::string, ICMPType>::iterator it =
+            if (std::map<const std::string_view, ICMPType>::const_iterator it =
                   icmp_m.find(log_data.icmp.type);
                 it == icmp_m.end()) { // found
               switch (it->second) {
@@ -750,18 +749,12 @@ PFLogentry::mkTime(const std::string d_, const std::string t_) const
 {
   struct std::tm tm_tmp = {};
   if (isValidDate(d_) && isValidTime(t_)) {
-    auto [yy, mm, dd, hh, mn, ss] = std::tuple(std::stoi(d_.substr(0, 4)),
-                                               std::stoi(d_.substr(5, 2)),
-                                               std::stoi(d_.substr(8, 2)),
-                                               std::stoi(t_.substr(0, 2)),
-                                               std::stoi(t_.substr(3, 2)),
-                                               std::stoi(t_.substr(6, 2)));
-    tm_tmp.tm_year = std::move(yy) - 1900;
-    tm_tmp.tm_mon = std::move(mm) - 1;
-    tm_tmp.tm_mday = std::move(dd);
-    tm_tmp.tm_hour = std::move(hh);
-    tm_tmp.tm_min = std::move(mn);
-    tm_tmp.tm_sec = std::move(ss);
+    tm_tmp.tm_year = std::move(std::stoi(d_.substr(0, 4))) - 1900;
+    tm_tmp.tm_mon = std::move(std::stoi(d_.substr(5, 2))) - 1;
+    tm_tmp.tm_mday = std::move(std::stoi(d_.substr(8, 2)));
+    tm_tmp.tm_hour = std::move(std::stoi(t_.substr(0, 2)));
+    tm_tmp.tm_min = std::move(std::stoi(t_.substr(3, 2)));
+    tm_tmp.tm_sec = std::move(std::stoi(t_.substr(6, 2)));
   }
   return tm_tmp;
 }
@@ -1475,7 +1468,7 @@ PFQuery::field(Fields fld_, Compare cmp_, Visitor::var_t&& t_)
     std::pair<range_mmap_it, range_mmap_it> range_p_;
     range_p_ = filter_m.equal_range(std::move(std::mktime(&info_t.tm_begin)));
     if (range_p_.first != range_p_.second) {
-      for (auto it_ = range_p_.first; it_ != range_p_.second; ++it_) {
+      for (auto& it_ = range_p_.first; it_ != range_p_.second; ++it_) {
         switch (typevar_) {
           case TypeVar::TInt: {
             if (decision(
@@ -1519,7 +1512,7 @@ PFQuery::field(Fields fld_, Compare cmp_, Visitor::var_t&& t_)
       return;
     }
 
-    std::multimap<int, LogData>::iterator it_;
+    std::multimap<int, LogData>::const_iterator it_;
     for (it_ = lower_; it_ != upper_; ++it_) {
       switch (typevar_) {
         case TypeVar::TInt: {
@@ -2060,7 +2053,7 @@ template<typename ForwardIt>
 void
 PFSummary::compute(ForwardIt iter_, enum ProtoID id_, IPVersion ipver_)
 {
-  for (auto it_ = iter_.first; it_ != iter_.second; ++it_) {
+  for (auto& it_ = iter_.first; it_ != iter_.second; ++it_) {
     if (static_cast<IPVersion>(it_->second.ip_version) == ipver_ &&
         it_->second.proto_id == id_) {
       if (info_t.hostname.empty()) { // all
