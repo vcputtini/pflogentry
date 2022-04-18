@@ -93,6 +93,7 @@ PFLogentry::~PFLogentry()
 PFLogentry&
 PFLogentry::append(const std::string& raw__log_)
 {
+  raw_.resize(raw__log_.size());
   raw_ = std::move(raw__log_);
   if (parser() == PFLError::PFL_SUCCESS) {
     filter_m.insert({ std::mktime(&log_data.header.tm_time), log_data });
@@ -825,15 +826,20 @@ PFLogentry::compareDT1(const std::string data_,
   struct tm tm2 = {};
   struct tm tm3 = {};
 
-  if (log_fmt_ == LogFormat::LogBSD) {
-    ::strptime(data_.c_str(), "%H:%M:%S", &tm1);
-    ::strptime(tm_min_.c_str(), "%H:%M:%S", &tm2);
-    ::strptime(tm_max_.c_str(), "%H:%M:%S", &tm3);
-  } else {
-    ::strptime(data_.c_str(), "%Y-%m-%dT%H:%M:%S", &tm1);
-    ::strptime(tm_min_.c_str(), "%Y-%m-%dT%H:%M:%S", &tm2);
-    ::strptime(tm_max_.c_str(), "%Y-%m-%dT%H:%M:%S", &tm3);
+  switch (log_fmt_) {
+    case LogFormat::LogBSD: {
+      ::strptime(data_.c_str(), "%H:%M:%S", &tm1);
+      ::strptime(tm_min_.c_str(), "%H:%M:%S", &tm2);
+      ::strptime(tm_max_.c_str(), "%H:%M:%S", &tm3);
+      break;
+    }
+    default: {
+      ::strptime(data_.c_str(), "%Y-%m-%dT%H:%M:%S", &tm1);
+      ::strptime(tm_min_.c_str(), "%Y-%m-%dT%H:%M:%S", &tm2);
+      ::strptime(tm_max_.c_str(), "%Y-%m-%dT%H:%M:%S", &tm3);
+    }
   }
+
   tm_data = std::mktime(&tm1);
   tm_b = std::mktime(&tm2);
   tm_e = std::mktime(&tm3);
