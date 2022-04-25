@@ -1,3 +1,10 @@
+* Mon Apr 25 2022 PFlogentry <vcputtini@gmail.com>
+- std::regex has been replaced by boost::regex
+For reasons of better performance and analysis of RE.
+Some URLs were not being correctly handled by std::regex which caused
+the system crash. Using boost::regex these issues were resolved, and
+performance was greatly increased.
+
 * Tue Mar 15 2022 PFlogentry <vcputtini@gmail.com>
 - Fixes and minor improvements.
 
