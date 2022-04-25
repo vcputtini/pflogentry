@@ -673,7 +673,7 @@ PFLogentry::parser()
 #endif
       } // npos
 
-    } catch (std::regex_error& e_) {
+    } catch (boost::regex_error& e_) {
       std::cout << "Parser PFLogentry regex error = " << e_.what() << "\n";
       setError(PFLError::PFL_ERR_PARSER_FAILED);
       return PFLError::PFL_ERR_PARSER_FAILED;
