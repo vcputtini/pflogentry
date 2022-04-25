@@ -33,7 +33,7 @@ find_package(tinyxml2 REQUIRED)
 target_include_directories(pflogentry PRIVATE .)
 set_target_properties(pflogentry PROPERTIES PUBLIC_HEADER pflogentry.h)
 
-target_link_libraries(pflogentry PRIVATE tinyxml2 -lpthread)
+target_link_libraries(pflogentry PRIVATE tinyxml2 -lboost_regex -lpthread)
 target_compile_definitions(pflogentry PRIVATE pflogentry_LIBRARY)
 
 # Uncomment to install
