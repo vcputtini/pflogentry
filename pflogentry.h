@@ -49,7 +49,6 @@
 #include <iostream>
 #include <map>
 #include <numeric> // accumulate
-#include <regex>
 #include <set>
 #include <string>
 #include <string_view>
@@ -62,6 +61,10 @@
 
 #include <tinyxml2.h>
 using namespace tinyxml2;
+
+// Boost:
+// Reason: Better performance and analysis of RE.
+#include <boost/regex.hpp>
 
 #if defined(_MSC_VER) || defined(WIN64) || defined(_WIN64) ||                  \
   defined(__WIN64__) || defined(WIN32) || defined(_WIN32) ||                   \
@@ -491,21 +494,27 @@ private:
    * Don't change the regular expressions below, it will make the whole program
    * crash!
    */
-  std::regex re_id_rfc3164_ = {};
-  std::regex re_id_rfc5424_ = {};
+  boost::regex re_id_rfc3164_;
+  boost::regex re_id_rfc5424_;
   static constexpr char cp_id_rfc3164_[] =
     "^(\\S+)\\s+(\\S+) (\\S+) (.*?) (.+)";
   static constexpr char cp_id_rfc5424_[] =
     "^(<[0-9]{1,3}>[0-9])*\\ (\\S+?)\\ (\\S+?)\\ filterlog\\ \\S+?\\ \\S+?\\ "
     "\\S+?\\ (.*)$";
 
-  std::regex re_time_rfc3164_ = {};
-  std::regex re_time_rfc5424_ = {};
+  boost::regex re_time_rfc3164_;
+  boost::regex re_time_rfc5424_;
   static constexpr char cp_time_rfc3164_[] =
     "^([0-9]{2}):([0-9]{2}):([0-9]{2})$";
   static constexpr char cp_time_rfc5424_[] =
     "^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2}).([0-"
     "9]{6})(\\S+)$";
+
+  static const constexpr char re_date_fmt_[] =
+    "^([0-9]{4})-([0-9]{2})-([0-9]{2})$";
+
+  static const constexpr char re_time_fmt_[] =
+    "^([0-9]{2}):([0-9]{2}):([0-9]{2})$";
 
   static const constexpr char* nmonths_[] = { "Jan", "Feb", "Mar", "Apr",
                                               "May", "Jun", "Jul", "Aug",

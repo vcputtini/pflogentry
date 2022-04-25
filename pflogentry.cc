@@ -66,10 +66,10 @@ Visitor::varType(var_t t_) const
  * \brief Constructs a PFLogentry object. (default)
  */
 PFLogentry::PFLogentry(LogFormat fmt_, const int year_)
-  : re_id_rfc3164_(cp_id_rfc3164_, std::regex::optimize)
-  , re_id_rfc5424_(cp_id_rfc5424_, std::regex::optimize)
-  , re_time_rfc3164_(cp_time_rfc3164_, std::regex::optimize)
-  , re_time_rfc5424_(cp_time_rfc5424_, std::regex::optimize)
+  : re_id_rfc3164_(cp_id_rfc3164_)
+  , re_id_rfc5424_(cp_id_rfc5424_)
+  , re_time_rfc3164_(cp_time_rfc3164_)
+  , re_time_rfc5424_(cp_time_rfc5424_)
   , pflError(PFLError::PFL_SUCCESS)
 {
   if (fmt_ == LogFormat::LogBSD) {
@@ -378,13 +378,13 @@ PFLogentry::parser()
 
     try {
       log_data = {};
-      std::match_results<std::string::const_iterator> match;
+      boost::match_results<std::string::const_iterator> match;
       switch (log_fmt_) {
         case LogFormat::LogBSD:
-          std::regex_match(raw_.cbegin(), raw_.cend(), match, re_id_rfc3164_);
+          boost::regex_match(raw_, match, re_id_rfc3164_);
           break;
         case LogFormat::LogSyslog:
-          std::regex_match(raw_.cbegin(), raw_.cend(), match, re_id_rfc5424_);
+          boost::regex_match(raw_, match, re_id_rfc5424_);
       }
 #ifdef DEBUG_PARSER
       std::cout << "-0 = " << match[0] << "\n"
@@ -398,8 +398,8 @@ PFLogentry::parser()
       if (raw_[0] == '<') { // RFC-5424 line starts with '<'
         log_data.header.id = std::move(match[1]);
         log_data.header.time = std::move(match[2]);
-        std::smatch smatches;
-        std::regex_match(log_data.header.time, smatches, re_time_rfc5424_);
+        boost::smatch smatches;
+        boost::regex_match(log_data.header.time, smatches, re_time_rfc5424_);
         log_data.header.tm_time.tm_year =
           std::move(std::stoi(smatches[1]) - 1900);
         log_data.header.tm_time.tm_mon = std::move(std::stoi(smatches[2]) - 1);
@@ -422,8 +422,8 @@ PFLogentry::parser()
         log_data.header.tm_time.tm_mon = std::move(monthToNumber(match[1]) - 1);
         log_data.header.tm_time.tm_year = bsd_year_ - 1900;
         log_data.header.time = std::move(match[3]);
-        std::smatch smatches;
-        std::regex_match(log_data.header.time, smatches, re_time_rfc3164_);
+        boost::smatch smatches;
+        boost::regex_match(log_data.header.time, smatches, re_time_rfc3164_);
         log_data.header.tm_time.tm_hour = std::move(std::stoi(smatches[1]));
         log_data.header.tm_time.tm_min = std::move(std::stoi(smatches[2]));
         log_data.header.tm_time.tm_sec = std::move(std::stoi(smatches[3]));
@@ -698,9 +698,9 @@ bool
 PFLogentry::isValidDate(const std::string d_) const
 {
   if (!d_.empty()) {
-    std::regex re_date_("^([0-9]{4})-([0-9]{2})-([0-9]{2})$");
-    std::smatch smatches_;
-    if (std::regex_match(d_, smatches_, re_date_)) {
+    boost::regex re_date_(re_date_fmt_);
+    boost::smatch smatches_;
+    if (boost::regex_match(d_, smatches_, re_date_)) {
       auto [y_, m_, d_] = std::tuple(std::stoi(smatches_[1]),
                                      std::stoi(smatches_[2]),
                                      std::stoi(smatches_[3]));
@@ -723,9 +723,9 @@ bool
 PFLogentry::isValidTime(const std::string t_) const
 {
   if (!t_.empty()) {
-    std::regex re_time_("^([0-9]{2}):([0-9]{2}):([0-9]{2})$");
-    std::smatch smatches_;
-    if (std::regex_match(t_, smatches_, re_time_)) {
+    boost::regex re_time_(re_time_fmt_);
+    boost::smatch smatches_;
+    if (boost::regex_match(t_, smatches_, re_time_)) {
       auto [h_, m_, s_] = std::tuple(std::stoi(smatches_[1]),
                                      std::stoi(smatches_[2]),
                                      std::stoi(smatches_[3]));
