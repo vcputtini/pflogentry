@@ -597,7 +597,6 @@ protected:
 class PFLogentry_EXPORT PFCounter : public PFLogentry
 {
 public:
-public:
   explicit PFCounter();
   explicit PFCounter(PFLogentry* pf_);
   explicit PFCounter(PFLogentry* pf_, Fields fld_);

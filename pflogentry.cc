@@ -585,12 +585,14 @@ PFLogentry::parser()
                 case ICMPType::TStamp:
                   log_data.icmp.id = std::move(std::stoi(v[++inc]));
                   log_data.icmp.seq = std::move(std::stoi(v[++inc]));
+                  break;
                 case ICMPType::TStampReply:
                   log_data.icmp.id = std::move(std::stoi(v[++inc]));
                   log_data.icmp.seq = std::move(std::stoi(v[++inc]));
                   log_data.icmp.otime = std::move(std::stoul(v[++inc]));
                   log_data.icmp.rtime = std::move(std::stoul(v[++inc]));
                   log_data.icmp.ttime = std::move(std::stoul(v[++inc]));
+                  break;
                 default:
                   log_data.icmp.descr = std::move(v[++inc]);
               } // switch
@@ -1125,7 +1127,7 @@ PFCounter::PFCounter(PFLogentry* pf_)
  */
 PFCounter::PFCounter(PFLogentry* pf_, Fields fld_)
   : PFLogentry(*pf_)
-  , fld_f(fld_)
+  , fld_f(std::move(fld_))
 {}
 
 /*!
@@ -1135,7 +1137,7 @@ PFCounter::PFCounter(PFLogentry* pf_, Fields fld_)
 PFCounter&
 PFCounter::count(Fields fld_)
 {
-  fld = fld_;
+  fld = std::move(fld_);
   return *this;
 };
 
@@ -1298,8 +1300,11 @@ PFCounter::compute(var_t t_, Compare comp_) const
               case GT:
                 return this->compareDT(d_.second.header.time,
                                        std::get<std::string>(t_)) == 1;
+              case LE:
+                [[fallthrough]];
+              default:
+                return false;
             }
-            return false;
           });
       } else {
         return std::count_if(
@@ -1608,7 +1613,7 @@ PFQuery::getUint(size_t idx_, Fields fld_) const
  * \param idx_ Index for accessing data in the vector.
  * \param fld_ Field Id
  * \return field value or constant PFLogentry::invalidText in case of
- * error. \note
+ * error.
  */
 std::string
 PFQuery::getText(size_t idx_, Fields fld_) const
@@ -1642,7 +1647,9 @@ PFQuery::clear()
 
 /*!
  * \brief  Returns true if the query specified by Field-type exists;
- * otherwise returns false. \param fld_ Field id. \param comp_ Compara Id.
+ * otherwise returns false.
+ * \param fld_ Field id.
+ * \param comp_ Compara Id.
  * \param t_ Value to compare.
  * \return true | false
  */
@@ -1663,6 +1670,7 @@ PFQuery::exists(Fields fld_, Compare comp_, Visitor::var_t&& t_)
           return this->decision(
             intFields(fld_, d_.second), std::get<int>(t_), comp_);
         });
+      break;
     }
     case TypeVar::TLong: {
       result_ = std::find_if(
@@ -1670,6 +1678,7 @@ PFQuery::exists(Fields fld_, Compare comp_, Visitor::var_t&& t_)
           return this->decision(
             longFields(fld_, d_.second), std::get<long>(t_), comp_);
         });
+      break;
     }
     case TypeVar::TUint: {
       result_ = std::find_if(
@@ -1677,12 +1686,23 @@ PFQuery::exists(Fields fld_, Compare comp_, Visitor::var_t&& t_)
           return this->decision(
             uint32Fields(fld_, d_.second), std::get<uint32_t>(t_), comp_);
         });
+      break;
     }
     case TypeVar::TString: {
       if (fld_ == Fields::HdrTimeStamp) {
         result_ = std::find_if(
           ibegin_m, iend_m, [&comp_, &t_, *this](const filter_pair_& d_) {
             switch (comp_) {
+              case LE:
+                [[fallthrough]];
+              case GE:
+                [[fallthrough]];
+              case NE:
+                [[fallthrough]];
+              case BTWAND:
+                [[fallthrough]];
+              case BTWOR:
+                [[fallthrough]];
               case EQ:
                 if (this->compareDT(d_.second.header.time,
                                     std::get<std::string>(t_)) == 0)
@@ -1710,6 +1730,7 @@ PFQuery::exists(Fields fld_, Compare comp_, Visitor::var_t&& t_)
                                                comp_);
                        });
       }
+      break;
     }
     default: {
       return false;
@@ -1873,7 +1894,7 @@ PFSummary::countReasonByAction(const std::string direction_,
 {
   if (direction_ == "in") {
     if (reason_ == "match") {
-      mat_in_[0][0]++;
+      ++mat_in_[0][0];
       mat_in_[0][1] += (action_ == "pass") ? 1 : 0;
       mat_in_[0][2] += (action_ == "block") ? 1 : 0;
       mat_in_[0][3] += (action_ == "unkn(%u)") ? 1 : 0;
@@ -1885,12 +1906,12 @@ PFSummary::countReasonByAction(const std::string direction_,
     }
   } else { // out
     if (reason_ == "match") {
-      mat_out_[0][0]++;
+      ++mat_out_[0][0];
       mat_out_[0][1] += (action_ == "pass") ? 1 : 0;
       mat_out_[0][2] += (action_ == "block") ? 1 : 0;
       mat_out_[0][3] += (action_ == "unkn(%u)") ? 1 : 0;
     } else { // other
-      mat_out_[1][0]++;
+      ++mat_out_[1][0];
       mat_out_[1][1] += (action_ == "pass") ? 1 : 0;
       mat_out_[1][2] += (action_ == "block") ? 1 : 0;
       mat_out_[1][3] += (action_ == "unkn(%u)") ? 1 : 0;
@@ -2486,6 +2507,8 @@ PFSummary::print(ForwardIt it_)
   }
 
   switch (info_t.proto_id) {
+    case ProtoID::ICMPv6:
+      [[fallthrough]];
     case ProtoID::ProtoHOPOPT:
       [[fallthrough]];
     case ProtoID::ProtoUDP:
@@ -2572,7 +2595,7 @@ PFRawToXML::PFRawToXML() {}
  * \param log_data_t
  */
 PFRawToXML::PFRawToXML(LogFormat fmt_)
-  : log_fmt_(fmt_)
+  : log_fmt_(std::move(fmt_))
 {}
 
 /*!
@@ -2594,25 +2617,24 @@ PFRawToXML::dateTime() const
  * \internal
  * \brief Auxiliary member that provides the '.xml' extension to the
  * filename if the user does not inform.
+ *
  * \param fn_ File name
+ *
  * \return PFLError
  * \return Normalized file name by reference name with .xml extension.
+ *
  * \note 1. Basically for a name to be considered inconsistent, it must
- * have more than one dot '.' in its formation. \note 2. If there're
+ * have more than one dot '.' in its formation.
+ *
+ * \note 2. If there're
  * spaces in the filename they will be replaced by '_'.
  */
 PFLogentry::PFLError
 PFRawToXML::normFn(std::string& fn_)
 {
-  std::string fn_s = fn_;
-  int c = 0;
-  for (auto& a : fn_) {
-    if (a == '.') {
-      ++c;
-    }
-  }
-
-  if (c <= 1) {
+  size_t c_ = std::count_if(
+    fn_.cbegin(), fn_.cend(), [](const unsigned char c) { return c == '.'; });
+  if (c_ <= 1) {
     std::replace(fn_.begin(), fn_.end(), ' ', '_');
     std::transform(fn_.cbegin(), fn_.cend(), fn_.begin(), ::tolower);
     if (size_t f = std::string_view{ fn_ }.rfind("."); f != std::string::npos) {
