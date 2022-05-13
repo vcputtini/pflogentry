@@ -79,28 +79,29 @@ main()
    Field ID:
   */
   int ii = q->getInt(0, PFLogentry::SrcPort);
-  if (ii == INT_MAX) { // defined in <climits>
+  if( q->isValidResult(ii) ) {
     std::cout << "Index Out of range\n";
   } else {
     std::cout << ii << "\n";
   }
 
+
   long ll = q->getLong(0, PFLogentry::RuleNumber);
-  if (ll == LONG_MAX) { // defined in <climits>
+  if( q->isValidResult(ll) ) {
     std::cout << "Index Out of range\n";
   } else {
     std::cout << ll << "\n";
   }
 
   uint32_t ui = q->getUint(0, PFLogentry::IcmpOTime);
-  if (ui == UINT_MAX) { // defined in <climits>
+  if( q->isValidResult(ui) ) {
     std::cout << "Index Out of range\n";
   } else {
     std::cout << ui << "\n";
   }
 
   std::string str = q->getText(0, PFLogentry::RealIFace);
-  if (str == PFLogentry::invalidText) {
+  if( q->isValidResult(str) ) {
     std::cout << "Index Out of range\n";
   } else {
     std::cout << str << "\n";
