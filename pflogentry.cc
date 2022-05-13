@@ -1564,14 +1564,13 @@ PFQuery::field(Fields fld_, Compare cmp_, Visitor::var_t&& t_)
  * \brief Returns the value of the integer type field.
  * \param idx_ Index for accessing data in the vector.
  * \param fld_ Field Id
- * \return field value or INT_MAX in case of error.
- * \note Macro INT_MAX is defined in <climits>.
+ * \return field value or std::numeric_limits<int>::max() in case of error.
  */
 int
 PFQuery::getInt(size_t idx_, Fields fld_) const
 {
   return (size() > 0 ? (idx_ > (size() - 1))
-                         ? INT_MAX
+                         ? std::numeric_limits<int>::max()
                          : intFields(fld_, log_data_v_[idx_])
                      : 0);
 }
@@ -1580,14 +1579,13 @@ PFQuery::getInt(size_t idx_, Fields fld_) const
  * \brief Returns the value of the long integer type field.
  * \param idx_ Index for accessing data in the vector.
  * \param fld_ Field Id
- * \return field value or LONG_MAX in case of error.
- * \note Macro LONG_MAX is defined in <climits>.
+ * \return field value or std::numeric_limits<long>::max() in case of error.
  */
 long
 PFQuery::getLong(size_t idx_, Fields fld_) const
 {
   return (size() > 0 ? (idx_ > (size() - 1))
-                         ? LONG_MAX
+                         ? std::numeric_limits<long>::max()
                          : longFields(fld_, log_data_v_[idx_])
                      : 0L);
 }
@@ -1596,14 +1594,13 @@ PFQuery::getLong(size_t idx_, Fields fld_) const
  * \brief Returns the value of the unsigned int 32bits type field.
  * \param idx_ Index for accessing data in the vector.
  * \param fld_ Field Id
- * \return field value or UINT32_MAX in case of error.
- * \note Macro UINT32_MAX is defined in <climits>.
+ * \return field value or std::numeric_limits<uint32_t>::max() in case of error.
  */
 uint32_t
 PFQuery::getUint(size_t idx_, Fields fld_) const
 {
   return (size() > 0 ? (idx_ > (size() - 1))
-                         ? UINT32_MAX
+                         ? std::numeric_limits<uint32_t>::max()
                          : uint32Fields(fld_, log_data_v_[idx_])
                      : 0);
 }
@@ -1622,6 +1619,38 @@ PFQuery::getText(size_t idx_, Fields fld_) const
                          ? invalidText.data()
                          : strFields(fld_, log_data_v_[idx_])
                      : std::string());
+}
+
+/*!
+ * \brief Test the results of getInt(), getLong(), getUint() and getText()
+ * functions.
+ * \param t_ Value to test.
+ * \return true|false
+ */
+bool
+PFQuery::isValidResult(Visitor::var_t&& t_) const
+{
+  Visitor::TypeVar typevar_ = varType(t_);
+  switch (typevar_) {
+    case TypeVar::TInt: {
+      return std::get<int>(t_) == std::numeric_limits<int>::max();
+      break;
+    }
+    case TypeVar::TUint: {
+      return std::get<uint32_t>(t_) == std::numeric_limits<uint32_t>::max();
+      break;
+    }
+    case TypeVar::TLong: {
+      return std::get<long>(t_) == std::numeric_limits<long>::max();
+      break;
+    }
+    case TypeVar::TString: {
+      return std::get<std::string>(t_) == PFLogentry::invalidText;
+      break;
+    }
+    default:
+      return false;
+  }
 }
 
 /*!

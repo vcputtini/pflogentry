@@ -39,7 +39,6 @@
 
 #include <algorithm>
 #include <chrono>
-#include <climits> // INT_MAX, LONG_MAX, UINT_MAX, ...
 #include <cstddef> // size_t
 #include <cstdint>
 #include <ctime>
@@ -47,6 +46,7 @@
 #include <iomanip>
 #include <iomanip> // std::setw()
 #include <iostream>
+#include <limits>
 #include <map>
 #include <numeric> // accumulate
 #include <set>
@@ -645,6 +645,8 @@ public:
   long getLong(size_t idx_, Fields fld_) const;
   uint32_t getUint(size_t idx_, Fields fld_) const;
   std::string getText(size_t idx_, Fields fld_) const;
+
+  bool isValidResult(Visitor::var_t&& t_) const;
 
   bool exists(Fields fld_, Compare cmp_, Visitor::var_t&& t_);
   size_t size() const;
